@@ -11,6 +11,13 @@ namespace Studio {
             InitializeComponent();
         }
 
+        public event EventHandler<FormOpenEventArgs> subFormOpened;
+
+        public class FormOpenEventArgs : EventArgs {
+            public Form subForm { get; set; }
+        }
+
+
         /// <summary>
         /// Required designer variable.
         /// </summary>
@@ -46,6 +53,8 @@ namespace Studio {
             StartPosition = FormStartPosition.CenterScreen;
             Size screenSize = Screen.PrimaryScreen.WorkingArea.Size;
             Size = new Size((int)(screenSize.Width * .75), (int)(screenSize.Height * .75));
+            Padding = new Padding(0);
+            Icon = Properties.Resources.keithapps;
         }
 
 

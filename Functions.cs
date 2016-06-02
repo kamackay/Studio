@@ -9,6 +9,7 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Text;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace Global {
@@ -859,6 +860,14 @@ namespace Global {
 
         public static bool isCode(string[] text) {
             return true;
+        }
+        /// <summary>
+        /// Run an anonymous method in a new thread
+        /// </summary>
+        /// <param name="runnable"></param>
+        /// <exception cref="Exception"></exception>
+        public static void runAsync(Action runnable) {
+            new Thread(new ThreadStart(runnable)).Start();
         }
     }
 }

@@ -14,3 +14,12 @@ C:\Documents\DevLocal\Studio\bin\Debug\Studio.pdb
 C:\Documents\DevLocal\Studio\obj\Debug\Studio.csprojResolveAssemblyReference.cache
 C:\Documents\DevLocal\Studio\obj\Debug\Studio.Properties.Resources.resources
 C:\Documents\DevLocal\Studio\obj\Debug\Studio.csproj.GenerateResource.Cache
+C:\Keith\Studio\bin\Debug\Studio.exe.config
+C:\Keith\Studio\obj\Debug\Studio.exe
+C:\Keith\Studio\obj\Debug\Studio.pdb
+C:\Keith\Studio\bin\Debug\Studio.exe
+C:\Keith\Studio\bin\Debug\Studio.pdb
+C:\Keith\Studio\obj\Debug\Studio.csprojResolveAssemblyReference.cache
+C:\Keith\Studio\obj\Debug\Studio.Properties.Resources.resources
+C:\Keith\Studio\obj\Debug\Studio.csproj.GenerateResource.Cache
+C:\Keith\Studio\obj\Debug\Studio.PhotoViewer.resources
