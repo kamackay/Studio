@@ -43,7 +43,6 @@
             this.CloseButton.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
             this.CloseButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
             this.CloseButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.CloseButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.CloseButton.ForeColor = System.Drawing.Color.DarkGray;
             this.CloseButton.Location = new System.Drawing.Point(239, 12);
             this.CloseButton.Name = "CloseButton";
@@ -65,6 +64,7 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "PhotoViewer";
+            
             this.MouseClick += new System.Windows.Forms.MouseEventHandler(this.PhotoViewer_MouseClick);
             this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.This_MouseDown);
             this.MouseEnter += new System.EventHandler(this.CheckMouse);

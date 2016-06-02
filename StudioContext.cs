@@ -12,29 +12,68 @@ namespace Studio {
 
         public StudioContext(string[] args) {
             currentInstance = this;
-            init();
-            openForm();
+            init(args);
+            openForm(args);
         }
 
-        private void init() {
+        private void init(string[] args) {
             openForms = new List<Form>();
+            settings = Settings.getDefault();
         }
 
-        private void openForm() {
-            KeithForm f = new KeithForm();
-            f.FormClosed += delegate {
-                if (openForms.Count == 1) Application.Exit();
-            };
-            f.subFormOpened += delegate (object o, KeithForm.FormOpenEventArgs args) {
-                openForms.Add(args.subForm);
-                args.subForm.FormClosed += delegate {
+        public Settings settings;
+
+        private void openForm(string[] args) {
+            List<string> parameters = new List<string>(), arguments = new List<string>();
+            foreach (string temp in args) {
+                if (temp.StartsWith("--")) parameters.Add(temp.ToLower());
+                else arguments.Add(temp.ToLower());
+            }
+            if (parameters.Contains("--picture")) settings.picture = true;
+            if (settings.picture) {
+                Form f = new PhotoViewer();
+                f.FormClosed += delegate {
                     if (openForms.Count == 1) Application.Exit();
                 };
-            };
-            openForms.Add(f);
-            f.Show();
+                if (f is KeithForm)
+                    ((KeithForm)f).subFormOpened += delegate (object o, KeithForm.FormOpenEventArgs arg) {
+                        openForms.Add(arg.subForm);
+                        arg.subForm.FormClosed += delegate {
+                            if (openForms.Count == 1) Application.Exit();
+                        };
+                    };
+                openForms.Add(f);
+                f.Show();
+            } else {
+                Form f = new KeithForm();
+                f.FormClosed += delegate {
+                    if (openForms.Count == 1) Application.Exit();
+                };
+                if (f is KeithForm)
+                    ((KeithForm)f).subFormOpened += delegate (object o, KeithForm.FormOpenEventArgs arg) {
+                        openForms.Add(arg.subForm);
+                        arg.subForm.FormClosed += delegate {
+                            if (openForms.Count == 1) Application.Exit();
+                        };
+                    };
+                openForms.Add(f);
+                f.Show();
+            }
         }
 
         private List<Form> openForms;
+    }
+
+    public class Settings {
+        public bool logging { get; set; }
+        public bool picture { get; set; }
+
+        private Settings() {
+            logging = false;
+        }
+
+        public static Settings getDefault() {
+            return new Settings();
+        }
     }
 }

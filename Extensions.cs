@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using System.Diagnostics;
 using System.Collections.Specialized;
 using System.Text.RegularExpressions;
+using System.Collections.Generic;
 
 namespace Global {
     public static class Extensions {
@@ -173,15 +174,28 @@ namespace Global {
             return false;
         }
 
-        public static void deleteSimilar(this Bitmap img, Point location) {
-            try {/*
-                Color c = img.GetPixel(location.X, location.Y);
-                img.SetPixel(location.X, location.Y, Color.FromArgb(0, 0, 0, 0));
-                if (img.GetPixel(location.X, location.Y + 1).Equals(c)) img.deleteSimilar(new Point(location.X, location.Y + 1));
-                if (img.GetPixel(location.X + 1, location.Y).Equals(c)) img.deleteSimilar(new Point(location.X + 1, location.Y));
-                if (img.GetPixel(location.X, location.Y - 1).Equals(c)) img.deleteSimilar(new Point(location.X, location.Y - 1));
-                if (img.GetPixel(location.X - 1, location.Y).Equals(c)) img.deleteSimilar(new Point(location.X - 1, location.Y));*/
-            } catch (Exception e) { AutoClosingMessageBox.show(e.Message, "Err"); }
+        public static bool contains(this List<Color> list, Color c) {
+            try {
+                int argb = c.ToArgb();
+                foreach (Color col in list) if (col.ToArgb() == argb) return true;
+            } catch { }
+            return false;
+        }
+
+        /// <summary>
+        /// Get a color that does not exist anywhere in the Bitmap
+        /// </summary>
+        /// <param name="img"></param>
+        public static Color findMissingColor(this Bitmap img) {
+            List<Color> colors = new List<Color>();
+            for (int x = 0; x < img.Width; x++) {
+                for (int y = 0; y < img.Height; y++) {
+                    Color c = img.GetPixel(x, y);
+                    if (!colors.contains(c)) colors.Add(c);
+                }
+            }
+            for (int a = 0; a < 256; a++) for (int b = 0; b < 256; b++) for (int c = 0; c < 256; c++) if (!colors.contains(Color.FromArgb(a, b, c))) return Color.FromArgb(a, b, c);
+            return Color.Black;
         }
 
     }

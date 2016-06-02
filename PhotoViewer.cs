@@ -94,6 +94,8 @@ namespace Studio {
                     Size = s;
                     b = new Bitmap(b, s);//Resize the bitmap so that needlessly large images can still be loaded
                     BackgroundImage = b;
+                    BackColor = b.findMissingColor();
+                    TransparencyKey = BackColor;
                 }
                 //PostImageLoad:
                 BackgroundImageLayout = ImageLayout.Zoom;
