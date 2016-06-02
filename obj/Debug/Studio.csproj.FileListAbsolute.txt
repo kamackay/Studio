@@ -1,0 +1,16 @@
+c:\documents\devlocal\Studio\Studio\bin\Debug\Studio.exe.config
+c:\documents\devlocal\Studio\Studio\obj\Debug\Studio.csprojResolveAssemblyReference.cache
+c:\documents\devlocal\Studio\Studio\obj\Debug\Studio.Properties.Resources.resources
+c:\documents\devlocal\Studio\Studio\obj\Debug\Studio.csproj.GenerateResource.Cache
+c:\documents\devlocal\Studio\Studio\bin\Debug\Studio.exe
+c:\documents\devlocal\Studio\Studio\bin\Debug\Studio.pdb
+c:\documents\devlocal\Studio\Studio\obj\Debug\Studio.exe
+c:\documents\devlocal\Studio\Studio\obj\Debug\Studio.pdb
+C:\Documents\DevLocal\Studio\bin\Debug\Studio.exe.config
+C:\Documents\DevLocal\Studio\obj\Debug\Studio.exe
+C:\Documents\DevLocal\Studio\obj\Debug\Studio.pdb
+C:\Documents\DevLocal\Studio\bin\Debug\Studio.exe
+C:\Documents\DevLocal\Studio\bin\Debug\Studio.pdb
+C:\Documents\DevLocal\Studio\obj\Debug\Studio.csprojResolveAssemblyReference.cache
+C:\Documents\DevLocal\Studio\obj\Debug\Studio.Properties.Resources.resources
+C:\Documents\DevLocal\Studio\obj\Debug\Studio.csproj.GenerateResource.Cache

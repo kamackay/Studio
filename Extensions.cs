@@ -1,0 +1,197 @@
+﻿using System;
+using System.Drawing;
+using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
+using System.IO;
+using System.Linq;
+using System.Windows.Forms;
+using System.Diagnostics;
+using System.Collections.Specialized;
+using System.Text.RegularExpressions;
+
+namespace Global {
+    public static class Extensions {
+
+        /// <summary>
+        /// Resize the image to the specified width and height.
+        /// </summary>
+        /// <param name="image">The image to resize.</param>
+        /// <param name="width">The width to resize to.</param>
+        /// <param name="height">The height to resize to.</param>
+        /// <returns>The resized image.</returns>
+        public static Bitmap ResizeImage(this Image image, int width, int height) {
+            var destRect = new Rectangle(0, 0, width, height);
+            var destImage = new Bitmap(width, height);
+
+            destImage.SetResolution(image.HorizontalResolution, image.VerticalResolution);
+
+            using (var graphics = Graphics.FromImage(destImage)) {
+                graphics.CompositingMode = CompositingMode.SourceCopy;
+                graphics.CompositingQuality = CompositingQuality.HighQuality;
+                graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                graphics.SmoothingMode = SmoothingMode.HighQuality;
+                graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
+
+                using (var wrapMode = new ImageAttributes()) {
+                    wrapMode.SetWrapMode(WrapMode.TileFlipXY);
+                    graphics.DrawImage(image, destRect, 0, 0, image.Width, image.Height, GraphicsUnit.Pixel, wrapMode);
+                }
+            }
+
+            return destImage;
+        }
+
+        public static bool isEmpty(this string s) {
+            if (s == null) return true;
+            return s.Equals(string.Empty);
+        }
+
+        public static bool isDirectory(this string path) {
+            FileAttributes attr = File.GetAttributes(path);
+            return attr.HasFlag(FileAttributes.Directory);
+        }
+
+        public static void runOnUiThread(this Control control, Action runnable) {
+            try {
+                control.Invoke(runnable);
+            } catch (Exception) {
+                //Eat the exception
+            }
+        }
+
+        public static void emptyControls(this Panel panel) {
+            panel.removeAllControls();
+        }
+
+        public static void removeAllControls(this Panel panel) {
+            foreach (Control c in panel.Controls) {
+                if (!(c is VScrollBar)) {
+                    c.Visible = false;
+                    c.Invalidate();
+                }
+            }
+            panel.Invalidate();
+        }
+
+        public static bool IsBeingALittleShit(this Process p, StringCollection WhiteList) {
+            if (WhiteList.Contains(p.ProcessName.ToLower()))
+                return false;
+            else if (p.ProcessName.Contains("System")) return false;
+            else if (p.WorkingSet64 > (419430400)) return true;
+            else if (!p.Responding && p.WorkingSet64 > (104857600)) return true;
+            else return !p.Responding;
+        }
+
+        public static string[] getFolderContents(this DirectoryInfo directory) {
+            return Directory.EnumerateFileSystemEntries(directory.FullName).ToArray();
+        }
+
+        public static bool IsFolderOrFile(this string s) {
+            try { return (s[2] == '\\' && char.IsLetter(s[0]) && s[1] == ':'); } catch (Exception) { return false; }
+        }
+
+        public static bool IsURL(this string s) {
+            Uri result;
+            return (Uri.TryCreate(s, UriKind.Absolute, out result) && result.Scheme == Uri.UriSchemeHttp)
+                || (s.StartsWith("www.") && (s.Contains(".com") || s.Contains(".edu") || s.Contains(".org")));
+        }
+
+        public static void appendText(this RichTextBox textBox, string text, Color c) {
+            textBox.SelectionStart = textBox.TextLength;
+            textBox.SelectionLength = 0;
+            textBox.SelectionColor = c;
+            textBox.AppendText(text);
+        }
+
+        public static void appendLine(this RichTextBox textBox, string text, Color? c = null) {
+            textBox.SelectionStart = textBox.TextLength;
+            textBox.SelectionLength = 0;
+            textBox.AppendText(text + "\n");
+            textBox.SelectionColor = c ?? Color.White;
+        }
+
+        /// <summary>
+        /// Color all instances of a string 
+        /// </summary>
+        /// <param name="box">the RichTextBox</param>
+        /// <param name="text">The string to search for</param>
+        /// <param name="c">The Color to paint that string</param>
+        public static void colorAll(this RichTextBox box, string text, Color c) {
+            box.runOnUiThread(() => {
+                Match result = Regex.Match(box.Text, text, RegexOptions.Multiline);
+                while (result.Success) {
+                    box.SelectionStart = result.Index;
+                    box.SelectionLength = result.Length;
+                    while (!char.IsLetterOrDigit(box.SelectedText[0])) {
+                        box.SelectionStart++;
+                        box.SelectionLength--;
+                    }
+                    while (!char.IsLetterOrDigit(box.SelectedText[box.SelectionLength - 1]))
+                        box.SelectionLength--;
+                    box.SelectionColor = c;
+                    result = result.NextMatch();
+                }
+                box.SelectionLength = 0;
+            });
+        }
+
+        public static void colorStrings(this RichTextBox box, Color? color = null) {
+            Color c = color ?? Color.FromArgb(74, 166, 53);
+            box.runOnUiThread(() => {
+                Match m = Regex.Match(box.Text, "\"[^\"\\\\]*(?:\\\\.[^\"\\\\]*)*\"", RegexOptions.Multiline);
+                while (m.Success) {
+                    box.SelectionStart = m.Index;
+                    box.SelectionLength = m.Length;
+                    box.SelectionColor = c;
+                    m = m.NextMatch();
+                }
+                m = Regex.Match(box.Text, "'[^'\\\\]*(?:\\\\.[^'\\\\]*)*'", RegexOptions.Multiline);
+                while (m.Success) {
+                    box.SelectionStart = m.Index;
+                    box.SelectionLength = m.Length;
+                    box.SelectionColor = c;
+                    m = m.NextMatch();
+                }
+                box.SelectionLength = 0;
+            });
+        }
+
+        public static void scrollToTop(this RichTextBox box) {
+            box.runOnUiThread(() => {
+                box.SelectionStart = 0;
+                box.SelectionLength = 0;
+            });
+        }
+
+        public static bool contains(this string[] arr, string s) {
+            try {
+                foreach (string temp in arr)
+                    try {
+                        if (temp.Equals(s)) return true;
+                    } catch { }
+            } catch { }
+            return false;
+        }
+
+        public static void deleteSimilar(this Bitmap img, Point location) {
+            try {/*
+                Color c = img.GetPixel(location.X, location.Y);
+                img.SetPixel(location.X, location.Y, Color.FromArgb(0, 0, 0, 0));
+                if (img.GetPixel(location.X, location.Y + 1).Equals(c)) img.deleteSimilar(new Point(location.X, location.Y + 1));
+                if (img.GetPixel(location.X + 1, location.Y).Equals(c)) img.deleteSimilar(new Point(location.X + 1, location.Y));
+                if (img.GetPixel(location.X, location.Y - 1).Equals(c)) img.deleteSimilar(new Point(location.X, location.Y - 1));
+                if (img.GetPixel(location.X - 1, location.Y).Equals(c)) img.deleteSimilar(new Point(location.X - 1, location.Y));*/
+            } catch (Exception e) { AutoClosingMessageBox.show(e.Message, "Err"); }
+        }
+
+    }
+
+    public static class KeithApps {
+        public static Color grayColor() {
+            return ColorTranslator.FromHtml("#4C4A48");
+        }
+        public static Color darkGrayColor() {
+            return ColorTranslator.FromHtml("#252423");
+        }
+    }
+}
