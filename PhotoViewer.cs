@@ -69,6 +69,7 @@ namespace Studio {
 
         private void LoadImage(string p) {
             showLoading();
+            this.runOnUiThread(() => { BackColor = Color.Black; });
             try {
                 if (!File.Exists(p)) NoImage();
                 if (".svg".Equals(Path.GetExtension(p).ToLower())) {
@@ -112,11 +113,13 @@ namespace Studio {
         }
 
         void postImageSet() {
+            this.runOnUiThread(() => { Focus(); BringToFront(); Show(); });
+            Functions.runAsync(() => { Thread.Sleep(100); this.runOnUiThread(() => { TopMost = false; }); });
             Bitmap b = new Bitmap(img);
             Thread t = Functions.runAsync(() => {
                 if (b.isMostlyBlack())
                     this.runOnUiThread(() => { BackColor = Color.White; });
-            showLoading(false);
+                showLoading(false);
             });
         }
 
@@ -220,7 +223,7 @@ namespace Studio {
             int i = 0;
             while (string.Compare(files[i++].FullName, openFile) != 0) ;
             if (i == files.Length - 1) i = 0;
-            while (!isImage(files[i].FullName)) {
+            while (!FileTypes.isImage(files[i].FullName)) {
                 i++;
                 if (i == files.Length - 1) i = 0;
             }
@@ -231,10 +234,14 @@ namespace Studio {
             if (openFile == null) return;
             DirectoryInfo di = Directory.GetParent(openFile);
             FileInfo[] files = di.GetFiles();
-            int i = 0;
-            while (string.Compare(files[i++].FullName, openFile) != 0) ;
-            if (i == 0) i = files.Length;
-            i -= 2;
+            int i = -1;
+            while (string.Compare(files[++i].FullName, openFile) != 0) ;
+            i--;
+            if (i <= 0) i = files.Length - 1;
+            while (!FileTypes.isImage(files[i].FullName)) {
+                if (i <= 0) i = files.Length;
+                i--;
+            }
             LoadImage(files[i].FullName);
         }
 
