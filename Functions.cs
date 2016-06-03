@@ -12,7 +12,7 @@ using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 
-namespace Global {
+namespace Studio {
     public enum eReg // where to write in the Registry
     {
         Main,      // write in MainKey

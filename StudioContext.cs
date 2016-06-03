@@ -30,8 +30,13 @@ namespace Studio {
                 else arguments.Add(temp.ToLower());
             }
             if (parameters.Contains("--picture")) settings.picture = true;
+            if (arguments.Count > 0) {
+                if (System.IO.File.Exists(arguments[0])) {
+                    if (FileTypes.isImage(arguments[0])) settings.picture = true;
+                } else AutoClosingMessageBox.show("Unexpected Parameter: " + arguments[0], "Studio");
+            }
             if (settings.picture) {
-                Form f = new PhotoViewer();
+                Form f = arguments.Count > 0 ? new PhotoViewer(arguments[0]) : new PhotoViewer();
                 f.FormClosed += delegate {
                     if (openForms.Count == 1) Application.Exit();
                 };

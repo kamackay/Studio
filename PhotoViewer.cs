@@ -100,7 +100,6 @@ namespace Studio {
                     img = b;
                     postImageSet();
                 }
-                //PostImageLoad:
                 BackgroundImageLayout = ImageLayout.Zoom;
                 openFile = p;
                 Text = Path.GetFileName(openFile);

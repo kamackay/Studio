@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 
-namespace Global {
+namespace Studio {
     public class AutoClosingMessageBox {
         System.Threading.Timer _timeoutTimer;
         string _caption;
