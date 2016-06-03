@@ -866,8 +866,11 @@ namespace Global {
         /// </summary>
         /// <param name="runnable"></param>
         /// <exception cref="Exception"></exception>
-        public static void runAsync(Action runnable) {
-            new Thread(new ThreadStart(runnable)).Start();
+        public static Thread runAsync(Action runnable) {
+            Thread t = new Thread(new ThreadStart(runnable));
+            t.IsBackground = true;
+            t.Start();
+            return t;
         }
     }
 }

@@ -6,6 +6,7 @@ using System.Drawing;
 using System.IO;
 using System.Net;
 using System.Runtime.InteropServices;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace Studio {
@@ -67,6 +68,7 @@ namespace Studio {
         }
 
         private void LoadImage(string p) {
+            showLoading();
             try {
                 if (!File.Exists(p)) NoImage();
                 if (".svg".Equals(Path.GetExtension(p).ToLower())) {
@@ -88,14 +90,15 @@ namespace Studio {
                     Size = s;
                     b = new Bitmap(b, s);//Resize the bitmap so that needlessly large images can still be loaded
                     BackgroundImage = b;
+                    img = b;
                 } else {
                     Bitmap b = new Bitmap(p);
                     Size s = Shrink(b.Size);
                     Size = s;
                     b = new Bitmap(b, s);//Resize the bitmap so that needlessly large images can still be loaded
                     BackgroundImage = b;
-                    BackColor = b.findMissingColor();
-                    TransparencyKey = BackColor;
+                    img = b;
+                    postImageSet();
                 }
                 //PostImageLoad:
                 BackgroundImageLayout = ImageLayout.Zoom;
@@ -107,6 +110,15 @@ namespace Studio {
                 MessageBox.Show("Error: " + e.Message + "\nfile - " + p);
                 Environment.Exit(0);
             }
+        }
+
+        void postImageSet() {
+            Bitmap b = new Bitmap(img);
+            Thread t = Functions.runAsync(() => {
+                if (b.isMostlyBlack())
+                    this.runOnUiThread(() => { BackColor = Color.White; });
+            showLoading(false);
+            });
         }
 
         private Size Shrink(Size s) {
@@ -185,6 +197,23 @@ namespace Studio {
             openFile = null;
         }
 
+        Bitmap img;
+
+        public void makeBackTransparent(object o, EventArgs args) {
+            showLoading();
+            if (img != null) {
+                Bitmap temp = new Bitmap(img);
+                Functions.runAsync(() => {
+                    Color c = temp.findMissingColor();
+                    this.runOnUiThread(() => {
+                        BackColor = c;
+                        TransparencyKey = c;
+                    });
+                    showLoading(false);
+                });
+            }
+        }
+
         private void NextImage() {
             if (openFile == null) return;
             DirectoryInfo di = Directory.GetParent(openFile);
@@ -238,6 +267,7 @@ namespace Studio {
                     new MenuItem("Open", new EventHandler(open)),
                     new MenuItem("Copy", new EventHandler(copy)),
                     new MenuItem("Save", new EventHandler(save)),
+                    new MenuItem("Make Background Transparent", new EventHandler(makeBackTransparent)),
                     //new MenuItem("ConvertAllInDir", new EventHandler(allinDir)),
                     new MenuItem("Quit", new EventHandler(quit)) }).Show(ActiveForm, e.Location);
         }
@@ -257,6 +287,10 @@ namespace Studio {
 
         }
 
+        public void showLoading(bool shown = true) {
+            loadingImage.runOnUiThread(() => { loadingImage.Visible = shown; });
+        }
+
         private void open(object sender, EventArgs e) {
             PromptOpen();
         }
@@ -265,7 +299,7 @@ namespace Studio {
             Clipboard.SetImage(Image.FromFile(openFile));
         }
 
-        private void FlipBackColor(object sender, EventArgs e) {
+        private void FlipBackColor(object sender = null, EventArgs e = null) {
             if (BackColor == Color.Black) BackColor = Color.White;
             else BackColor = Color.Black;
         }

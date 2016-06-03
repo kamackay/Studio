@@ -174,9 +174,15 @@ namespace Global {
             return false;
         }
 
-        public static bool contains(this List<Color> list, Color c) {
+        /// <summary>
+        /// List of colors Contains this color
+        /// </summary>
+        /// <param name="list"></param>
+        /// <param name="color"></param>
+        /// <returns></returns>
+        public static bool contains(this List<Color> list, Color color) {
             try {
-                int argb = c.ToArgb();
+                int argb = color.ToArgb();
                 foreach (Color col in list) if (col.ToArgb() == argb) return true;
             } catch { }
             return false;
@@ -196,6 +202,22 @@ namespace Global {
             }
             for (int a = 0; a < 256; a++) for (int b = 0; b < 256; b++) for (int c = 0; c < 256; c++) if (!colors.contains(Color.FromArgb(a, b, c))) return Color.FromArgb(a, b, c);
             return Color.Black;
+        }
+
+        public static bool isMostlyBlack(this Bitmap image) {
+            int darkPixels = 0, calculated = 0;
+            for (int x = 0; x < image.Width; x++) {
+                for (int y = 0; y < image.Height; y++) {
+                    Color c = image.GetPixel(x, y);
+                    if (c.isDark()) darkPixels++;
+                    if (c.A > 128) calculated++;
+                }
+            }
+            return darkPixels * 2 > calculated;
+        }
+
+        public static bool isDark(this Color c) {
+            return c.A > 128 && c.R < 128 && c.G < 128 && c.B < 128;
         }
 
     }
