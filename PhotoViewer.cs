@@ -113,7 +113,7 @@ namespace Studio {
         }
 
         void postImageSet() {
-            this.runOnUiThread(() => { Focus(); BringToFront(); Show(); });
+            this.runOnUiThread(() => { Focus(); BringToFront(); Show(); Activate(); });
             Functions.runAsync(() => { Thread.Sleep(100); this.runOnUiThread(() => { TopMost = false; }); });
             Bitmap b = new Bitmap(img);
             Thread t = Functions.runAsync(() => {
