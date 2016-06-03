@@ -1,0 +1,6 @@
+Windows Registry Editor Version 5.00
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\KeithApps\Studio]
+"Path"="C:\\Program Files\\KeithApps\\Studio\\Studio.exe"
+
+
