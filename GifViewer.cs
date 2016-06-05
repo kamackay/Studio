@@ -21,7 +21,7 @@ namespace Studio {
             loadImage(filename);
         }
 
-        protected override void init() {
+        protected void init() {
             FormClosing += delegate {
                 StudioContext.getCurrentInstance().formClosed(this);
             };

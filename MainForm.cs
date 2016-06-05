@@ -1,13 +1,13 @@
 ﻿using CefSharp;
 using CefSharp.WinForms;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Text;
 using System.Windows.Forms;
-using System.Collections.Generic;
 
 namespace Studio {
     public partial class MainForm : KeithForm {
@@ -17,24 +17,23 @@ namespace Studio {
             return home;
         }
 
-        public MainForm() {
+        public MainForm() : base() {
             preInit();
             InitializeComponent();
-            postInit();
         }
 
         string currentPage;
 
-        public MainForm(string param) {
+        public MainForm(string param) : base() {
             preInit();
             //if (!param.Equals("debug")) currentPage = param;
             InitializeComponent();
-            postInit();
             if (param.Equals("debug")) runDebug();
             else open(param);
         }
 
-        protected override void init() {
+        protected void init() {
+
         }
 
         void preInit() {
@@ -44,11 +43,7 @@ namespace Studio {
             if (f == null) f = new Font("Arial", fontSize);
             darkColor = ColorTranslator.FromHtml("#4C4A48");
         }
-
-        void postInit() {
-
-        }
-
+        
         public void findOnPageCommand() {
             findBar.runOnUiThread(() => {
                 findBar.Visible = true;
@@ -320,15 +315,12 @@ namespace Studio {
         ContainerControl navigationContainer;
         FindBar findBar;
 
-        public Color DarkColor
-        {
-            get
-            {
+        public Color DarkColor {
+            get {
                 return darkColor;
             }
 
-            set
-            {
+            set {
                 darkColor = value;
             }
         }

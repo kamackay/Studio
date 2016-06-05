@@ -213,7 +213,7 @@ namespace Studio {
                 Client.DownloadFile("https://inkscape.org/en/gallery/item/3956/inkscape-0.91-x64.msi", msi);
                 Process.Start(msi);
                 Close();
-            } catch (Exception e) { Close(); }
+            } catch (Exception) { this.exit(); }
         }
 
         private void NoImage() {

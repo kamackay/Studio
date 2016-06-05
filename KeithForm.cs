@@ -3,12 +3,26 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Runtime.InteropServices;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace Studio {
     public abstract partial class KeithForm : Form {
         public KeithForm() {
             InitializeComponent();
+        }
+
+        public Action initialActions = null;
+
+        private void init() {
+            Functions.runAsync(() => {
+                try {
+                    if (initialActions != null) {
+                        Thread.Sleep(100);
+                        initialActions.Invoke();
+                    }
+                } catch { }
+            });
         }
 
         public event EventHandler<FormOpenEventArgs> subFormOpened;
@@ -33,8 +47,6 @@ namespace Studio {
             }
             base.Dispose(disposing);
         }
-
-        protected abstract void init();
 
         public const int WM_NCLBUTTONDOWN = 0xA1;
         public const int HT_CAPTION = 0x2;
