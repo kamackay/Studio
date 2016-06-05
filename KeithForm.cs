@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 namespace Studio {
-    public partial class KeithForm : Form {
+    public abstract partial class KeithForm : Form {
         public KeithForm() {
             InitializeComponent();
         }

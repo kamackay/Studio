@@ -41,6 +41,20 @@ namespace Studio {
             else PromptOpen();
         }
 
+        public event EventHandler<FormOpenEventArgs> subFormOpened;
+
+        public class FormOpenEventArgs : EventArgs {
+            public Form subForm { get; set; }
+            public FormOpenEventArgs(Form form) {
+                subForm = form;
+            }
+        }
+
+        protected virtual void onSubFormOpened(FormOpenEventArgs args) {
+            subFormOpened?.Invoke(this, args);
+            if (subFormOpened == null) StudioContext.getCurrentInstance().formOpened(args.subForm);
+        }
+
         private void init() {
             MinimumSize = new Size(50, 50);
         }
@@ -72,7 +86,15 @@ namespace Studio {
             this.runOnUiThread(() => { BackColor = Color.Black; });
             try {
                 if (!File.Exists(p)) NoImage();
-                if (".svg".Equals(Path.GetExtension(p).ToLower())) {
+                string ext = Path.GetExtension(p).ToLower();
+                if (".gif".Equals(ext)) {
+                    GifViewer viewer = new GifViewer(p);
+                    viewer.FormClosed += delegate { Close(); };
+                    viewer.Show();
+                    onSubFormOpened(new FormOpenEventArgs(viewer));
+                    this.exit();
+                    return;
+                } else if (".svg".Equals(ext)) {
                     const string inkExe = @"c:\program files\inkscape\inkscape.exe";
                     if (!File.Exists(inkExe)) {
                         DialogResult result = MessageBox.Show("You need to install Inkscape in order to view that file. Install Now?", "Inkscape needed", MessageBoxButtons.YesNo);

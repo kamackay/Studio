@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace Studio {
@@ -19,7 +21,17 @@ namespace Studio {
         private void init(string[] args) {
             openForms = new List<Form>();
             settings = Settings.getDefault();
+            Functions.runAsync(() => {
+                while (runBackground) {
+                    try {
+                        Thread.Sleep(5000);
+                        if (openForms.Count == 0) Environment.Exit(0);
+                    } catch { }
+                }
+            });
         }
+
+        bool runBackground = true;
 
         public Settings settings;
 
@@ -36,34 +48,64 @@ namespace Studio {
                 } else AutoClosingMessageBox.show("Unexpected Parameter: " + arguments[0], "Studio");
             }
             if (settings.picture) {
-                Form f = arguments.Count > 0 ? new PhotoViewer(arguments[0]) : new PhotoViewer();
-                f.FormClosed += delegate {
-                    if (openForms.Count == 1) Application.Exit();
-                };
-                if (f is KeithForm)
-                    ((KeithForm)f).subFormOpened += delegate (object o, KeithForm.FormOpenEventArgs arg) {
-                        openForms.Add(arg.subForm);
-                        arg.subForm.FormClosed += delegate {
+                try {
+                    if (arguments.Count > 0 && ".gif".Equals(System.IO.Path.GetExtension(arguments[0]))) {
+                        GifViewer f = new GifViewer(arguments[0]);
+                        f.FormClosing += delegate {
                             if (openForms.Count == 1) Application.Exit();
+                            openForms.Remove(f);
                         };
-                    };
-                openForms.Add(f);
-                f.Show();
+                        openForms.Add(f);
+                        f.Show();
+                    } else {
+                        PhotoViewer f = arguments.Count > 0 ? new PhotoViewer(arguments[0]) : new PhotoViewer();
+                        f.FormClosing += delegate {
+                            if (openForms.Count == 1) Application.Exit();
+                            openForms.Remove(f);
+                        };
+                        f.subFormOpened += delegate (object o, PhotoViewer.FormOpenEventArgs arg) {
+                            openForms.Add(arg.subForm);
+                            arg.subForm.FormClosing += delegate {
+                                if (openForms.Count == 1) Application.Exit();
+                                openForms.Remove(arg.subForm);
+                            };
+                        };
+                        openForms.Add(f);
+                        f.Show();
+                    }
+                } catch { }
             } else {
-                Form f = new KeithForm();
-                f.FormClosed += delegate {
-                    if (openForms.Count == 1) Application.Exit();
-                };
-                if (f is KeithForm)
-                    ((KeithForm)f).subFormOpened += delegate (object o, KeithForm.FormOpenEventArgs arg) {
-                        openForms.Add(arg.subForm);
-                        arg.subForm.FormClosed += delegate {
-                            if (openForms.Count == 1) Application.Exit();
-                        };
+                try {
+                    MainForm f = new MainForm();
+                    f.FormClosing += delegate {
+                        if (openForms.Count == 1) Application.Exit();
+                        openForms.Remove(f);
                     };
-                openForms.Add(f);
-                f.Show();
+                    if (f is KeithForm)
+                        f.subFormOpened += delegate (object o, KeithForm.FormOpenEventArgs arg) {
+                            openForms.Add(arg.subForm);
+                            arg.subForm.FormClosing += delegate {
+                                if (openForms.Count == 1) Application.Exit();
+                                openForms.Remove(arg.subForm);
+                            };
+                        };
+                    openForms.Add(f);
+                    f.Show();
+                } catch { }
             }
+        }
+
+        public void formOpened(Form f) {
+            try {
+                if (f != null) openForms.Add(f);
+            } catch { }
+        }
+
+        public void formClosed(Form f = null) {
+            try {
+                if (f != null) openForms.Remove(f);
+                if (openForms.Count == 0) System.Environment.Exit(0);
+            } catch { }
         }
 
         private List<Form> openForms;

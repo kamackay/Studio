@@ -10,7 +10,7 @@ using System.Windows.Forms;
 using System.Collections.Generic;
 
 namespace Studio {
-    public partial class MainForm : Form {
+    public partial class MainForm : KeithForm {
         private static readonly bool DebuggingSubProcess = Debugger.IsAttached;
         Color darkColor;
         string getHomepage() {

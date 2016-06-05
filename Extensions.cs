@@ -9,6 +9,8 @@ using System.Diagnostics;
 using System.Collections.Specialized;
 using System.Text.RegularExpressions;
 using System.Collections.Generic;
+using Studio;
+using System.Threading;
 
 namespace Global {
     public static class Extensions {
@@ -134,6 +136,15 @@ namespace Global {
                 }
                 box.SelectionLength = 0;
             });
+        }
+
+
+        public static void exit(this Form f) {
+            Functions.runAsync(() => {
+                Thread.Sleep(100);
+                f.runOnUiThread(() => { f.Close(); });
+            });
+            
         }
 
         public static void colorStrings(this RichTextBox box, Color? color = null) {
