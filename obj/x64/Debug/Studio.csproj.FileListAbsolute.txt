@@ -31,5 +31,4 @@ C:\Documents\DevLocal\Studio\obj\x64\Debug\Studio.csproj.GenerateResource.Cache
 C:\Documents\DevLocal\Studio\obj\x64\Debug\Studio.exe
 C:\Documents\DevLocal\Studio\obj\x64\Debug\Studio.pdb
 C:\Documents\DevLocal\Studio\bin\Resources\studio.ico
-C:\Documents\DevLocal\Studio\obj\x64\Debug\Studio.csprojResolveAssemblyReference.cache
 C:\Documents\DevLocal\Studio\obj\x64\Debug\Studio.GifViewer.resources
