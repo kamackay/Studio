@@ -34,6 +34,9 @@ namespace Studio {
             else open(param);
         }
 
+        protected override void init() {
+        }
+
         void preInit() {
             buttonSize = 30;
             float fontSize = 18f;

@@ -34,6 +34,7 @@ namespace Studio {
             base.Dispose(disposing);
         }
 
+        protected abstract void init();
 
         public const int WM_NCLBUTTONDOWN = 0xA1;
         public const int HT_CAPTION = 0x2;

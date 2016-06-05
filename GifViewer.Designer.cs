@@ -1,4 +1,6 @@
-﻿namespace Studio {
+﻿using System;
+
+namespace Studio {
     partial class GifViewer {
         /// <summary>
         /// Required designer variable.
@@ -15,7 +17,7 @@
             }
             base.Dispose(disposing);
         }
-
+        
         #region Windows Form Designer generated code
 
         /// <summary>
