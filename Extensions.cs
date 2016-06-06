@@ -143,6 +143,7 @@ namespace Global {
             Functions.runAsync(() => {
                 Thread.Sleep(100);
                 f.runOnUiThread(() => { f.Close(); });
+                StudioContext.getCurrentInstance().formClosed(f);
             });
             
         }

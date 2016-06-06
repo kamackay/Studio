@@ -97,7 +97,7 @@ namespace Studio {
 
         public void formOpened(Form f) {
             try {
-                if (f != null) openForms.Add(f);
+                if (f != null && !openForms.Contains(f)) openForms.Add(f);
             } catch { }
         }
 

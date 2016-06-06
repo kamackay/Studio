@@ -57,6 +57,9 @@ namespace Studio {
 
         private void init() {
             MinimumSize = new Size(50, 50);
+            Functions.runAsync(() => {
+                StudioContext.getCurrentInstance().formOpened(this);
+            });
         }
         public const int WM_NCLBUTTONDOWN = 0xA1;
         public const int HT_CAPTION = 0x2;
@@ -278,12 +281,12 @@ namespace Studio {
         protected override void OnPaint(PaintEventArgs e) {
             base.OnPaint(e);
         }
-        private void CheckMouse(object a = null, EventArgs b = null) {///*
+        private void CheckMouse(object a = null, EventArgs b = null) {
             int give = 50;
             if ((Cursor.Position.X >= Right - give) && (Cursor.Position.X <= Right) &&
                 (Cursor.Position.Y >= Top) && (Cursor.Position.Y <= Top + give))
                 CloseButton.Visible = true;
-            else CloseButton.Visible = false;//*/
+            else CloseButton.Visible = false;
         }
         private void PhotoViewer_MouseMove(object sender, MouseEventArgs e) {
             CheckMouse();
@@ -359,5 +362,97 @@ namespace Studio {
             } catch (Exception) { return false; }
         }
 
+        /// <summary>
+        /// Required designer variable.
+        /// </summary>
+        private System.ComponentModel.IContainer components = null;
+
+        /// <summary>
+        /// Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        protected override void Dispose(bool disposing) {
+            if (disposing && (components != null)) {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
+        #region Windows Form Designer generated code
+
+        /// <summary>
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent() {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PhotoViewer));
+            CloseButton = new Button();
+            loadingImage = new PictureBox();
+            ((System.ComponentModel.ISupportInitialize)(loadingImage)).BeginInit();
+            SuspendLayout();
+            // 
+            // CloseButton
+            // 
+            CloseButton.AutoSize = true;
+            CloseButton.BackColor = Color.Transparent;
+            CloseButton.BackgroundImage = Properties.Resources.close;
+            CloseButton.BackgroundImageLayout = ImageLayout.Stretch;
+            CloseButton.FlatAppearance.BorderColor = Color.DarkGray;
+            CloseButton.FlatAppearance.BorderSize = 0;
+            CloseButton.FlatAppearance.MouseDownBackColor = Color.Transparent;
+            CloseButton.FlatAppearance.MouseOverBackColor = Color.Transparent;
+            CloseButton.FlatStyle = FlatStyle.Flat;
+            CloseButton.ForeColor = Color.DarkGray;
+            CloseButton.Location = new Point(239, 12);
+            CloseButton.Name = "CloseButton";
+            CloseButton.Size = new Size(33, 32);
+            CloseButton.TabIndex = 0;
+            CloseButton.UseVisualStyleBackColor = false;
+            CloseButton.Visible = false;
+            CloseButton.Click += new EventHandler(CloseButton_Click);
+            CloseButton.MouseEnter += new EventHandler(CheckMouse);
+            CloseButton.MouseHover += new EventHandler(CheckMouse);
+            // 
+            // loadingImage
+            // 
+            loadingImage.Image = Properties.Resources.material_loading;
+            loadingImage.BackgroundImageLayout = ImageLayout.Zoom;
+            loadingImage.BackColor = Color.Transparent;
+            loadingImage.Location = new Point(0, 0);
+            loadingImage.Name = "loadingImage";
+            loadingImage.Size = new Size(100, 100);
+            loadingImage.SizeMode = PictureBoxSizeMode.Zoom;
+            loadingImage.TabIndex = 1;
+            loadingImage.TabStop = false;
+            // 
+            // PhotoViewer
+            // 
+            AutoScaleDimensions = new SizeF(6F, 13F);
+            AutoScaleMode = AutoScaleMode.Font;
+            StartPosition = FormStartPosition.CenterParent;
+            TopMost = true;
+            BackColor = SystemColors.Desktop;
+            ClientSize = new Size(284, 264);
+            Controls.Add(loadingImage);
+            Controls.Add(CloseButton);
+            FormBorderStyle = FormBorderStyle.None;
+            Icon = ((Icon)(resources.GetObject("$this.Icon")));
+            Name = "PhotoViewer";
+            MouseClick += new MouseEventHandler(PhotoViewer_MouseClick);
+            MouseDown += new MouseEventHandler(This_MouseDown);
+            MouseEnter += new EventHandler(CheckMouse);
+            MouseHover += new EventHandler(CheckMouse);
+            MouseMove += new MouseEventHandler(PhotoViewer_MouseMove);
+            Resize += new EventHandler(PhotoViewer_Resize);
+            ((System.ComponentModel.ISupportInitialize)(loadingImage)).EndInit();
+            ResumeLayout(false);
+            PerformLayout();
+
+        }
+
+        #endregion
+
+        private Button CloseButton;
+        private PictureBox loadingImage;
     }
 }

@@ -47,7 +47,7 @@ namespace Studio {
         public void findOnPageCommand() {
             findBar.runOnUiThread(() => {
                 findBar.Visible = true;
-                findBar.Location = new System.Drawing.Point(Width - findBar.Width,
+                findBar.Location = new Point(Width - findBar.Width,
                     headerContainer.Bottom);
                 findBar.BringToFront();
             });
@@ -149,7 +149,7 @@ namespace Studio {
             //findBar
             //
             findBar.Font = f;
-            findBar.Location = new System.Drawing.Point(Width - 50, 200);
+            findBar.Location = new Point(Width - 50, 200);
             findBar.Visible = false;
             findBar.SearchChanged += searchTextChanged;
             //
@@ -172,9 +172,9 @@ namespace Studio {
             // browserContent
             // 
             browser.Dock = DockStyle.Fill;
-            browser.Location = new System.Drawing.Point(0, 0);
-            browser.MinimumSize = new System.Drawing.Size(100, 400);
-            browser.Size = new System.Drawing.Size((int)(Screen.PrimaryScreen.WorkingArea.Width / 1.25f),
+            browser.Location = new Point(0, 0);
+            browser.MinimumSize = new Size(100, 400);
+            browser.Size = new Size((int)(Screen.PrimaryScreen.WorkingArea.Width / 1.25f),
                 (int)(Screen.PrimaryScreen.WorkingArea.Height / 1.25f));
             browser.TabIndex = 0;
             browser.FrameLoadEnd += Browser_FrameLoadEnd;
@@ -188,7 +188,7 @@ namespace Studio {
             browser.DisplayHandler = new DisplayHandler();
             browser.JsDialogHandler = new JsDialogHandler();
             browser.DragHandler = new DragHandler();
-            browser.FocusHandler = new FocusHandler();/**/
+            browser.FocusHandler = new FocusHandler();
             var settings = new CefSettings();
             settings.CachePath = "cache";
 
@@ -210,15 +210,15 @@ namespace Studio {
             //backButton
             //
             backButton.Dock = DockStyle.Left;
-            backButton.Size = new System.Drawing.Size(buttonSize, buttonSize);
+            backButton.Size = new Size(buttonSize, buttonSize);
             backButton.AutoSize = true;
             backButton.SizeMode = PictureBoxSizeMode.CenterImage;
-            backButton.Image = new Bitmap(Properties.Resources.back, new System.Drawing.Size(buttonSize, buttonSize));
+            backButton.Image = new Bitmap(Properties.Resources.back, new Size(buttonSize, buttonSize));
             backButton.MouseEnter += delegate {
-                backButton.Image = new Bitmap(Properties.Resources.back_red, new System.Drawing.Size(buttonSize, buttonSize));
+                backButton.Image = new Bitmap(Properties.Resources.back_red, new Size(buttonSize, buttonSize));
             };
             backButton.MouseLeave += delegate {
-                backButton.Image = new Bitmap(Properties.Resources.back, new System.Drawing.Size(buttonSize, buttonSize));
+                backButton.Image = new Bitmap(Properties.Resources.back, new Size(buttonSize, buttonSize));
             };
             backButton.MouseClick += delegate (object a, MouseEventArgs e) {
                 if (e.Button == MouseButtons.Left) back();
@@ -227,14 +227,14 @@ namespace Studio {
             //forwardButton
             //
             forwardButton.Dock = DockStyle.Right;
-            forwardButton.Size = new System.Drawing.Size(buttonSize, buttonSize);
+            forwardButton.Size = new Size(buttonSize, buttonSize);
             forwardButton.SizeMode = PictureBoxSizeMode.CenterImage;
-            forwardButton.Image = new Bitmap(Properties.Resources.forward, new System.Drawing.Size(buttonSize, buttonSize));
+            forwardButton.Image = new Bitmap(Properties.Resources.forward, new Size(buttonSize, buttonSize));
             forwardButton.MouseEnter += delegate {
-                forwardButton.Image = new Bitmap(Properties.Resources.forward_red, new System.Drawing.Size(buttonSize, buttonSize));
+                forwardButton.Image = new Bitmap(Properties.Resources.forward_red, new Size(buttonSize, buttonSize));
             };
             forwardButton.MouseLeave += delegate {
-                forwardButton.Image = new Bitmap(Properties.Resources.forward, new System.Drawing.Size(buttonSize, buttonSize));
+                forwardButton.Image = new Bitmap(Properties.Resources.forward, new Size(buttonSize, buttonSize));
             };
             forwardButton.MouseClick += delegate (object a, MouseEventArgs e) {
                 if (e.Button == MouseButtons.Left) forward();
@@ -245,7 +245,7 @@ namespace Studio {
             AutoScaleDimensions = new SizeF(6F, 13F);
             BackColor = Color.Black;
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new System.Drawing.Size((int)(Screen.PrimaryScreen.WorkingArea.Width / 1.25f),
+            ClientSize = new Size((int)(Screen.PrimaryScreen.WorkingArea.Width / 1.25f),
                 (int)(Screen.PrimaryScreen.WorkingArea.Height / 1.25f));
             Shown += MainForm_Shown;
             Font = f;
@@ -253,7 +253,7 @@ namespace Studio {
             Controls.Add(browser);
             Resize += delegate {
                 this.runOnUiThread(() => {
-                    findBar.Location = new System.Drawing.Point(Width - findBar.Width, headerContainer.Bottom);
+                    findBar.Location = new Point(Width - findBar.Width, headerContainer.Bottom);
                 });
             };
             navigationContainer.Controls.Add(backButton);
@@ -297,11 +297,11 @@ namespace Studio {
 
         private void MainForm_Shown(object sender, EventArgs e) {
             float factor = 1.25f;
-            ClientSize = new System.Drawing.Size((int)(Screen.PrimaryScreen.WorkingArea.Width / factor),
+            ClientSize = new Size((int)(Screen.PrimaryScreen.WorkingArea.Width / factor),
                 (int)(Screen.PrimaryScreen.WorkingArea.Height / factor));
-            Size = new System.Drawing.Size((int)(Screen.PrimaryScreen.WorkingArea.Width / factor),
+            Size = new Size((int)(Screen.PrimaryScreen.WorkingArea.Width / factor),
                 (int)(Screen.PrimaryScreen.WorkingArea.Height / factor));
-            Location = new System.Drawing.Point(100, 100);
+            Location = new Point(100, 100);
             int max = 25;
             foreach (Control c in headerContainer.Controls) if (c.Height > max) max = c.Height;
             headerContainer.Height = max + buttonSize;
@@ -418,7 +418,9 @@ namespace Studio {
             return true;
         }
 
-        public bool OnBeforePopup(IWebBrowser browserControl, IBrowser browser, IFrame frame, string targetUrl, string targetFrameName, WindowOpenDisposition targetDisposition, bool userGesture, IPopupFeatures popupFeatures, IWindowInfo windowInfo, IBrowserSettings browserSettings, ref bool noJavascriptAccess, out IWebBrowser newBrowser) {
+        public bool OnBeforePopup(IWebBrowser browserControl, IBrowser browser, IFrame frame, string targetUrl, 
+            string targetFrameName, WindowOpenDisposition targetDisposition, bool userGesture, IPopupFeatures popupFeatures, 
+            IWindowInfo windowInfo, IBrowserSettings browserSettings, ref bool noJavascriptAccess, out IWebBrowser newBrowser) {
             throw new NotImplementedException();
         }
     }
