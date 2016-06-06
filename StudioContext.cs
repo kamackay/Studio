@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Windows.Forms;
 
-namespace Studio {
+namespace Electrum {
     class StudioContext : ApplicationContext {
 
         private static StudioContext currentInstance;

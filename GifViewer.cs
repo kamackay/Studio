@@ -1,10 +1,8 @@
-﻿using System;
-using System.Drawing;
+﻿using System.Drawing;
 using System.Drawing.Imaging;
 using System.Threading;
-using System.Windows.Forms;
 
-namespace Studio {
+namespace Electrum {
     partial class GifViewer : KeithForm {
         public GifViewer() {
             InitializeComponent();

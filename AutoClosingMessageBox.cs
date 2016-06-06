@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 
-namespace Studio {
+namespace Electrum {
     public class AutoClosingMessageBox {
         System.Threading.Timer _timeoutTimer;
         string _caption;

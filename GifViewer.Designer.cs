@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Studio {
+namespace Electrum {
     partial class GifViewer {
         /// <summary>
         /// Required designer variable.

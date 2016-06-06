@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace Studio {
+namespace Electrum {
     public static class KnownFolders {
         private static string[] _knownFolderGuids = new string[]
         {

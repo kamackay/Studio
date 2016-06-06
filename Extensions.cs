@@ -9,7 +9,7 @@ using System.Diagnostics;
 using System.Collections.Specialized;
 using System.Text.RegularExpressions;
 using System.Collections.Generic;
-using Studio;
+using Electrum;
 using System.Threading;
 
 namespace Global {

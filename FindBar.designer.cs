@@ -1,4 +1,4 @@
-﻿namespace Studio {
+﻿namespace Electrum {
     partial class FindBar {
         /// <summary> 
         /// Required designer variable.

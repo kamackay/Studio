@@ -2,7 +2,7 @@
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace Studio {
+namespace Electrum {
     public partial class FindBar : UserControl {
         public FindBar() {
             InitializeComponent();

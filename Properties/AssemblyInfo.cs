@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Studio")]
+[assembly: AssemblyTitle("Electrum Studio")]
 [assembly: AssemblyDescription("Intelligent Studio for the Windows System")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Keith MacKay (KeithApps)")]
-[assembly: AssemblyProduct("Studio")]
+[assembly: AssemblyProduct("Electrum Studio")]
 [assembly: AssemblyCopyright("Copyright ©  2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

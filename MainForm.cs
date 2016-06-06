@@ -9,7 +9,7 @@ using System.IO;
 using System.Text;
 using System.Windows.Forms;
 
-namespace Studio {
+namespace Electrum {
     public partial class MainForm : KeithForm {
         private static readonly bool DebuggingSubProcess = Debugger.IsAttached;
         Color darkColor;
