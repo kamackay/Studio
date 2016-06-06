@@ -21,13 +21,13 @@ namespace Electrum {
         private void init(string[] args) {
             openForms = new List<Form>();
             settings = Settings.getDefault();
-            Functions.runAsync(() => {
+            Functions.runAsync(() => {/**/
                 while (runBackground) {
                     try {
                         Thread.Sleep(5000);
                         if (openForms.Count == 0) Environment.Exit(0);
                     } catch { }
-                }
+                }/**/
             });
         }
 
@@ -75,23 +75,23 @@ namespace Electrum {
                     }
                 } catch { }
             } else {
+
                 try {
                     MainForm f = new MainForm();
                     f.FormClosing += delegate {
                         if (openForms.Count == 1) Application.Exit();
                         openForms.Remove(f);
                     };
-                    if (f is KeithForm)
-                        f.subFormOpened += delegate (object o, KeithForm.FormOpenEventArgs arg) {
-                            openForms.Add(arg.subForm);
-                            arg.subForm.FormClosing += delegate {
-                                if (openForms.Count == 1) Application.Exit();
-                                openForms.Remove(arg.subForm);
-                            };
+                    f.subFormOpened += delegate (object o, KeithForm.FormOpenEventArgs arg) {
+                        openForms.Add(arg.subForm);
+                        arg.subForm.FormClosing += delegate {
+                            if (openForms.Count == 1) Application.Exit();
+                            openForms.Remove(arg.subForm);
                         };
+                    };
                     openForms.Add(f);
                     f.Show();
-                } catch { }
+                } catch (Exception e) { MessageBox.Show("Error: " + e.Message); }
             }
         }
 

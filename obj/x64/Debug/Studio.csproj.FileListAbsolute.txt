@@ -35,3 +35,4 @@ C:\Keith\Studio\obj\x64\Debug\Electrum.PhotoViewer.resources
 C:\Keith\Studio\obj\x64\Debug\Electrum.Properties.Resources.resources
 C:\Keith\Studio\obj\x64\Debug\electrum.exe
 C:\Keith\Studio\obj\x64\Debug\electrum.pdb
+C:\Keith\Studio\obj\x64\Debug\Studio.csprojResolveAssemblyReference.cache
