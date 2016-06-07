@@ -114,14 +114,14 @@ namespace Electrum {
                     Bitmap b = new Bitmap(png);
                     Size s = Shrink(b.Size);
                     Size = s;
-                    b = new Bitmap(b, s);//Resize the bitmap so that needlessly large images can still be loaded
+                    b = new Bitmap(b, s);// Resize the bitmap so that needlessly large images can still be loaded
                     BackgroundImage = b;
                     img = b;
                 } else {
                     Bitmap b = new Bitmap(p);
                     Size s = Shrink(b.Size);
                     Size = s;
-                    b = new Bitmap(b, s);//Resize the bitmap so that needlessly large images can still be loaded
+                    b = new Bitmap(b, s);// Resize the bitmap so that needlessly large images can still be loaded
                     BackgroundImage = b;
                     img = b;
                     postImageSet();

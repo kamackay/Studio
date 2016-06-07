@@ -52,17 +52,7 @@ namespace Electrum {
             openFileButton.Location = new Point(20, 20 + t);
             openFileButton.Padding = new Padding(20, 10, 20, 10);
             openFileButton.ForeColor = Color.White;
-            openFileButton.Click += delegate {
-                this._(() => {
-                    OpenFileDialog o = new OpenFileDialog();
-                    o.InitialDirectory = @"C:\";
-                    o.Multiselect = false;
-                    if (o.ShowDialog() == DialogResult.OK) {
-                        StudioContext.getCurrentInstance().openFile(o.FileName, this);
-                        Close();
-                    }
-                });
-            };
+            openFileButton.Click += this.f;
             Controls.Add(openFileButton);
         }
         private MaterialRaisedButton openFileButton;

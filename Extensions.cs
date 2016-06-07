@@ -232,6 +232,21 @@ namespace Global {
             return c.A > 128 && c.R < 128 && c.G < 128 && c.B < 128;
         }
 
+        /// <summary>
+        /// Open a window to open a file, then handle that file
+        /// </summary>
+        public static void f(this Form f, object ob = null, EventArgs args = null) {
+            f._(() => {
+                OpenFileDialog o = new OpenFileDialog();
+                o.InitialDirectory = @"C:\";
+                o.Multiselect = false;
+                if (o.ShowDialog() == DialogResult.OK) {
+                    StudioContext.getCurrentInstance().openFile(o.FileName, f);
+                    f.Close();
+                }
+            });
+        }
+
     }
 
     public static class KeithApps {

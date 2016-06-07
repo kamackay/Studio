@@ -1,4 +1,5 @@
-﻿using MaterialSkin;
+﻿using Global;
+using MaterialSkin;
 using MaterialSkin.Controls;
 using System;
 using System.Collections.Generic;
@@ -78,8 +79,12 @@ namespace Electrum {
             };
         }
 
+        static readonly IntPtr o = (IntPtr)0x4F;
 
         protected override void WndProc(ref Message m) {
+            if (m.Msg == 0x100 || m.Msg == 0x104) {
+                if (m.WParam == o) this.f();
+            }
             bool handled = false;
             if (m.Msg == WM_NCHITTEST || m.Msg == WM_MOUSEMOVE) {
                 Size formSize = Size;
