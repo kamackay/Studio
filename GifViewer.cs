@@ -34,12 +34,12 @@ namespace Electrum {
                     loadThread = null;
                 } catch { } finally { loadThread = null; }
             }
-            loadThread = Functions.runAsync(() => {
+            loadThread = F.runAsync(() => {
                 image.runOnUiThread(() => { image.Image = gifImage.getNextFrame(); });
                 Thread.Sleep(10);
                 if (image.Image == null)
                     image.runOnUiThread(() => { image.Image = gifImage.getNextFrame(); });
-                this.runOnUiThread(() => { try { Height = image.Image.Height + 40; Width = image.Image.Width + 20; } catch { } });
+                this.runOnUiThread(() => { try { Height = image.Image.Height + 40 + image.Top; Width = image.Image.Width + 40; } catch { } });
                 /*
                 while (runAnim) {
                     try {
@@ -49,7 +49,62 @@ namespace Electrum {
             });
             Text = System.IO.Path.GetFileName(filename);
         }
+
+        /// <summary>
+        /// Required designer variable.
+        /// </summary>
+        private System.ComponentModel.IContainer components = null;
+
+        /// <summary>
+        /// Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        protected override void Dispose(bool disposing) {
+            if (disposing && (components != null)) {
+                components.Dispose();
             }
+            base.Dispose(disposing);
+        }
+
+        #region Windows Form Designer generated code
+
+        /// <summary>
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent() {
+            image = new System.Windows.Forms.PictureBox();
+            ((System.ComponentModel.ISupportInitialize)(image)).BeginInit();
+            SuspendLayout();
+            // 
+            // pictureBox1
+            // 
+            image.Anchor = ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            | System.Windows.Forms.AnchorStyles.Right);
+            image.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            image.Location = new Point(20, 80);
+            image.Name = "image";
+            image.Size = new Size(610, 429);
+            image.TabIndex = 0;
+            image.TabStop = false;
+            // 
+            // GifViewer
+            // 
+            AutoScaleDimensions = new SizeF(6F, 13F);
+            AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            ClientSize = new Size(610, 429);
+            Controls.Add(image);
+            Name = "GifViewer";
+            Text = "GifViewer";
+            ((System.ComponentModel.ISupportInitialize)(image)).EndInit();
+            ResumeLayout(false);
+
+        }
+
+        #endregion
+
+        private System.Windows.Forms.PictureBox image;
+    }
 
     public class GifImage {
         private Image gifImage;

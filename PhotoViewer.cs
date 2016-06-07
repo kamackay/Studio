@@ -57,7 +57,7 @@ namespace Electrum {
 
         private void init() {
             MinimumSize = new Size(50, 50);
-            Functions.runAsync(() => {
+            F.runAsync(() => {
                 StudioContext.getCurrentInstance().formOpened(this);
             });
         }
@@ -139,9 +139,9 @@ namespace Electrum {
 
         void postImageSet() {
             this.runOnUiThread(() => { Focus(); BringToFront(); Show(); Activate(); });
-            Functions.runAsync(() => { Thread.Sleep(100); this.runOnUiThread(() => { TopMost = false; }); });
+            F.runAsync(() => { Thread.Sleep(100); this.runOnUiThread(() => { TopMost = false; }); });
             Bitmap b = new Bitmap(img);
-            Thread t = Functions.runAsync(() => {
+            Thread t = F.runAsync(() => {
                 if (b.isMostlyBlack())
                     this.runOnUiThread(() => { BackColor = Color.White; });
                 showLoading(false);
@@ -230,7 +230,7 @@ namespace Electrum {
             showLoading();
             if (img != null) {
                 Bitmap temp = new Bitmap(img);
-                Functions.runAsync(() => {
+                F.runAsync(() => {
                     Color c = temp.findMissingColor();
                     this.runOnUiThread(() => {
                         BackColor = c;

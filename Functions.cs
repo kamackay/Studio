@@ -20,7 +20,7 @@ namespace Electrum {
         WorkState, // write in MainKey\WorkDirs\DirectoryName\WorkStates\Filename
     }
 
-    public static class Functions {
+    public static class F {
         const string ms_RegistryRoot = @"Software\ElmueSoft\SqlBuilder";
 
         #region COM / Win32 API
@@ -871,6 +871,10 @@ namespace Electrum {
             t.IsBackground = true;
             t.Start();
             return t;
+        }
+
+        public static Thread async(Action runnable) {
+            return runAsync(runnable);
         }
     }
 }

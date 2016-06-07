@@ -140,7 +140,7 @@ namespace Global {
 
 
         public static void exit(this Form f) {
-            Functions.runAsync(() => {
+            F.runAsync(() => {
                 Thread.Sleep(100);
                 f.runOnUiThread(() => { f.Close(); });
                 StudioContext.getCurrentInstance().formClosed(f);

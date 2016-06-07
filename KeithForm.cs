@@ -1,4 +1,6 @@
-﻿using System;
+﻿using MaterialSkin;
+using MaterialSkin.Controls;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
@@ -7,15 +9,20 @@ using System.Threading;
 using System.Windows.Forms;
 
 namespace Electrum {
-    public abstract partial class KeithForm : Form {
+    public abstract partial class KeithForm : MaterialForm {
         public KeithForm() {
             InitializeComponent();
+            init();
+            materialSkinManager = MaterialSkinManager.Instance;
+            materialSkinManager.AddFormToManage(this);
+            materialSkinManager.Theme = MaterialSkinManager.Themes.DARK;
+            materialSkinManager.ColorScheme = new ColorScheme(Primary.BlueGrey800, Primary.BlueGrey900, Primary.BlueGrey500, Accent.LightBlue200, TextShade.WHITE);
         }
-
+        private readonly MaterialSkinManager materialSkinManager;
         public Action initialActions = null;
 
         private void init() {
-            Functions.runAsync(() => {
+            F.runAsync(() => {
                 try {
                     if (initialActions != null) {
                         Thread.Sleep(100);
@@ -48,13 +55,10 @@ namespace Electrum {
             base.Dispose(disposing);
         }
 
-        public const int WM_NCLBUTTONDOWN = 0xA1;
-        public const int HT_CAPTION = 0x2;
-
         [DllImport("user32.dll")]
-        public static extern int SendMessage(IntPtr hWnd, int Msg, int wParam, int lParam);
+        public static extern new int SendMessage(IntPtr hWnd, int Msg, int wParam, int lParam);
         [DllImport("user32.dll")]
-        public static extern bool ReleaseCapture();
+        public static extern new bool ReleaseCapture();
 
         /// <summary>
         /// Required method for Designer support - do not modify

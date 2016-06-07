@@ -36,3 +36,4 @@ C:\Documents\DevLocal\Studio\obj\x64\Debug\Electrum.MainForm.resources
 C:\Documents\DevLocal\Studio\obj\x64\Debug\Electrum.PhotoViewer.resources
 C:\Documents\DevLocal\Studio\obj\x64\Debug\Electrum.Properties.Resources.resources
 C:\Documents\DevLocal\Studio\obj\x64\Debug\Studio.csprojResolveAssemblyReference.cache
+C:\Keith\Studio\bin\MaterialSkin.dll

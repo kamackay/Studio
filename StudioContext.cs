@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading;
 using System.Windows.Forms;
 
@@ -21,7 +22,7 @@ namespace Electrum {
         private void init(string[] args) {
             openForms = new List<Form>();
             settings = Settings.getDefault();
-            Functions.runAsync(() => {/**/
+            F.runAsync(() => {/**/
                 while (runBackground) {
                     try {
                         Thread.Sleep(5000);
@@ -75,9 +76,8 @@ namespace Electrum {
                     }
                 } catch { }
             } else {
-
                 try {
-                    MainForm f = new MainForm();
+                    ElectrumMain f = new ElectrumMain();
                     f.FormClosing += delegate {
                         if (openForms.Count == 1) Application.Exit();
                         openForms.Remove(f);
@@ -106,6 +106,39 @@ namespace Electrum {
                 if (f != null) openForms.Remove(f);
                 if (openForms.Count == 0) System.Environment.Exit(0);
             } catch { }
+        }
+
+        void openForm(Form f) {
+            f.FormClosing += delegate {
+                if (openForms.Count == 1) Application.Exit();
+                openForms.Remove(f);
+            };
+            if (f is KeithForm)
+                ((KeithForm)f).subFormOpened += delegate (object o, KeithForm.FormOpenEventArgs arg) {
+                    openForms.Add(arg.subForm);
+                    arg.subForm.FormClosing += delegate {
+                        if (openForms.Count == 1) Application.Exit();
+                        openForms.Remove(arg.subForm);
+                    };
+                };
+            openForms.Add(f);
+            f.Show();
+        }
+
+        public void openFile(string filename, Form f = null) {
+            string ext = Path.GetExtension(filename);
+            switch (ext.ToLower()) {
+                default: break;
+                case ".pdf":
+                    if (!(f is MainForm)) openForm(new MainForm(filename));
+                    else openForm(new MainForm(filename)); //I'll work on that later
+                    return;
+                case ".gif":
+                    openForm(new GifViewer(filename));
+                    return;
+            }
+
+            // Handle all filetypes here
         }
 
         private List<Form> openForms;

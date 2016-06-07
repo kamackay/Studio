@@ -60,6 +60,10 @@
     <ApplicationIcon>Resources\studio.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="MaterialSkin, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\MaterialSkin.0.2.1\lib\MaterialSkin.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -74,6 +78,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AutoClosingMessageBox.cs" />
+    <Compile Include="ElectrumMain.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Extensions.cs" />
     <Compile Include="FileTypes.cs" />
     <Compile Include="FindBar.cs">
@@ -85,9 +92,6 @@
     <Compile Include="Functions.cs" />
     <Compile Include="GifViewer.cs">
       <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GifViewer.Designer.cs">
-      <DependentUpon>GifViewer.cs</DependentUpon>
     </Compile>
     <Compile Include="KeithForm.cs">
       <SubType>Form</SubType>
@@ -191,6 +195,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\material_loading.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\button_back.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="packages\cef.redist.x64.3.2623.1401\build\cef.redist.x64.targets" Condition="Exists('packages\cef.redist.x64.3.2623.1401\build\cef.redist.x64.targets')" />

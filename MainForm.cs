@@ -10,7 +10,7 @@ using System.Text;
 using System.Windows.Forms;
 
 namespace Electrum {
-    public partial class MainForm : KeithForm {
+    public partial class MainForm : Form {
         private static readonly bool DebuggingSubProcess = Debugger.IsAttached;
         Color darkColor;
         string getHomepage() {
@@ -44,7 +44,7 @@ namespace Electrum {
             if (f == null) f = new Font("Arial", fontSize);
             darkColor = ColorTranslator.FromHtml("#4C4A48");
         }
-        
+
         public void findOnPageCommand() {
             findBar.runOnUiThread(() => {
                 findBar.Visible = true;
@@ -100,7 +100,7 @@ namespace Electrum {
         void forward() {
             if (browser.CanGoForward) browser.Forward();
         }
-        const string home = "http://keithmackay.com";
+        const string home = "http://www.google.com";
         private void Browser_FrameLoadEnd(object sender, FrameLoadEndEventArgs e) {
             urlBar.runOnUiThread(() => {
                 string address = browser.Address;
@@ -418,8 +418,8 @@ namespace Electrum {
             return true;
         }
 
-        public bool OnBeforePopup(IWebBrowser browserControl, IBrowser browser, IFrame frame, string targetUrl, 
-            string targetFrameName, WindowOpenDisposition targetDisposition, bool userGesture, IPopupFeatures popupFeatures, 
+        public bool OnBeforePopup(IWebBrowser browserControl, IBrowser browser, IFrame frame, string targetUrl,
+            string targetFrameName, WindowOpenDisposition targetDisposition, bool userGesture, IPopupFeatures popupFeatures,
             IWindowInfo windowInfo, IBrowserSettings browserSettings, ref bool noJavascriptAccess, out IWebBrowser newBrowser) {
             throw new NotImplementedException();
         }
@@ -500,7 +500,7 @@ namespace Electrum {
 
         }
     }
-    
+
     public class FocusHandler : IFocusHandler {
         public void OnGotFocus() {
 
@@ -526,6 +526,14 @@ namespace Electrum {
             try {
                 control.Invoke(runnable);
             } catch (Exception) {
+                //Eat the exception
+            }
+        }
+
+        public static void sync(this Control control, Action runnable) {
+            try {
+                control.Invoke(runnable);
+            } catch {
                 //Eat the exception
             }
         }
