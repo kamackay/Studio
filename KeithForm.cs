@@ -72,6 +72,10 @@ namespace Electrum {
             Size = new Size((int)(screenSize.Width * .75), (int)(screenSize.Height * .75));
             Padding = new Padding(0);
             Icon = Properties.Resources.keithapps;
+            KeyPreview = true;
+            KeyPress += delegate (object o, KeyPressEventArgs args) {
+                this._(() => { });
+            };
         }
 
 
@@ -107,7 +111,6 @@ namespace Electrum {
 
         const uint WM_NCHITTEST = 0x0084;
         const int RESIZE_HANDLE_SIZE = 10;
-        const uint WM_MOUSEMOVE = 0x0200;
         const uint HTLEFT = 10;
         const uint HTRIGHT = 11;
         const uint HTBOTTOMRIGHT = 17;

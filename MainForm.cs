@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Text;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace Electrum {
@@ -536,6 +537,26 @@ namespace Electrum {
             } catch {
                 //Eat the exception
             }
+        }
+
+        /// <summary>
+        /// Handler Method to allow UI updates and button animations to run, then handle UI actions on the main thread
+        /// </summary>
+        /// <param name="control">UI Element to tie runnable to</param>
+        /// <param name="runnable">Actions to perform while still allowing animations and UI Elements</param>
+        /// <returns>The Thread that the runnable will be run on</returns>
+        public static Thread _(this Control control, Action runnable) {
+            try {
+                Thread t = new Thread(new ThreadStart(() => {
+                    try {
+                        Thread.Sleep(100);
+                        control.Invoke(runnable);
+                    } catch { }
+                }));
+                t.IsBackground = true;
+                t.Start();
+                return t;
+            } catch { return null; }
         }
     }
 }
