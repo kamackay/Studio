@@ -1,8 +1,7 @@
-﻿using MaterialSkin.Controls;
-using Global;
+﻿using Global;
+using MaterialSkin.Controls;
 using System.Drawing;
 using System.Windows.Forms;
-using System.Threading;
 
 namespace Electrum {
     public partial class ElectrumMain : KeithForm {
@@ -29,7 +28,6 @@ namespace Electrum {
             base.Dispose(disposing);
         }
 
-        #region Windows Form Designer generated code
 
         const int t = 65;
 
@@ -50,13 +48,13 @@ namespace Electrum {
             openFileButton.UseCompatibleTextRendering = false;
             openFileButton.Location = new Point(20, 20 + t);
             openFileButton.Padding = new Padding(20, 10, 20, 10);
-            openFileButton.ForeColor = Color.White;
+            openFileButton.setTextColor(Color.FromArgb(255, 238, 88));
+            openFileButton.setBackColor(KeithApps.grayColor());
             openFileButton.Primary = true;
             openFileButton.Click += this.f;
             Controls.Add(openFileButton);
         }
         private MaterialRaisedButton openFileButton;
 
-        #endregion
     }
 }

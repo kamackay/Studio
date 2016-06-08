@@ -5,3 +5,10 @@ C:\Documents\DevLocal\Studio\MaterialSkin\obj\Debug\MaterialSkin.Properties.Reso
 C:\Documents\DevLocal\Studio\MaterialSkin\obj\Debug\MaterialSkin.csproj.GenerateResource.Cache
 C:\Documents\DevLocal\Studio\MaterialSkin\obj\Debug\MaterialSkin.dll
 C:\Documents\DevLocal\Studio\MaterialSkin\obj\Debug\MaterialSkin.pdb
+C:\Keith\Studio\MaterialSkin\bin\Debug\MaterialSkin.dll
+C:\Keith\Studio\MaterialSkin\bin\Debug\MaterialSkin.pdb
+C:\Keith\Studio\MaterialSkin\obj\Debug\MaterialSkin.csprojResolveAssemblyReference.cache
+C:\Keith\Studio\MaterialSkin\obj\Debug\MaterialSkin.Properties.Resources.resources
+C:\Keith\Studio\MaterialSkin\obj\Debug\MaterialSkin.csproj.GenerateResource.Cache
+C:\Keith\Studio\MaterialSkin\obj\Debug\MaterialSkin.dll
+C:\Keith\Studio\MaterialSkin\obj\Debug\MaterialSkin.pdb

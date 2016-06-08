@@ -16,8 +16,11 @@ namespace Electrum {
             materialSkinManager = MaterialSkinManager.Instance;
             materialSkinManager.AddFormToManage(this); 
             materialSkinManager.Theme = MaterialSkinManager.Themes.DARK;
-            materialSkinManager.ColorScheme = new ColorScheme(Primary.Yellow400, Primary.MetroDark, 
-                Primary.Yellow600, Accent.Yellow400, TextShade.BLACK);
+            materialSkinManager.ColorScheme = new ColorScheme(Primary.Yellow400,
+                Primary.MetroDark, 
+                Primary.Yellow600,
+                Accent.Yellow400,
+                TextShade.BLACK);
         }
         private readonly MaterialSkinManager materialSkinManager;
         public Action initialActions = null;

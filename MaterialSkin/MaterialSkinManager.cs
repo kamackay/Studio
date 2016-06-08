@@ -111,7 +111,7 @@ namespace MaterialSkin
         private static readonly Color BACKGROUND_LIGHT = Color.FromArgb(255, 255, 255, 255);
         private static Brush BACKGROUND_LIGHT_BRUSH = new SolidBrush(BACKGROUND_LIGHT);
 
-        private static readonly Color BACKGROUND_DARK = Color.FromArgb(255, 51, 51, 51);
+        private static readonly Color BACKGROUND_DARK = Color.FromArgb(255, 61, 61, 61);
         private static Brush BACKGROUND_DARK_BRUSH = new SolidBrush(BACKGROUND_DARK);
 
         //Application action bar

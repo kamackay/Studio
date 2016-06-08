@@ -39,3 +39,4 @@ C:\Documents\DevLocal\Studio\bin\CefSharp.xml
 C:\Documents\DevLocal\Studio\bin\CefSharp.Core.xml
 C:\Documents\DevLocal\Studio\obj\x64\Debug\electrum.exe
 C:\Documents\DevLocal\Studio\obj\x64\Debug\electrum.pdb
+C:\Keith\Studio\bin\MaterialSkin.pdb
