@@ -534,7 +534,8 @@ namespace Electrum {
         public static void sync(this Control control, Action runnable) {
             try {
                 control.Invoke(runnable);
-            } catch {
+            } catch /**/ (Exception e) /**/ {
+                MessageBox.Show("error");
                 //Eat the exception
             }
         }

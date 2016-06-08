@@ -35,6 +35,10 @@ namespace MaterialSkin.Controls {
         public MaterialRaisedButton() {
             Primary = true;
 
+            MouseEnter += delegate (object o, System.EventArgs args) {
+                animationManager.StartNewAnimation(AnimationDirection.In, new Point(Width / 2, Height / 2));
+            };
+
             animationManager = new AnimationManager(false) {
                 Increment = 0.03,
                 AnimationType = AnimationType.EaseOut

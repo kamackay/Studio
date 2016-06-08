@@ -6,10 +6,8 @@ using System.Drawing.Text;
 using System.Windows.Forms;
 using MaterialSkin.Animations;
 
-namespace MaterialSkin.Controls
-{
-    public class MaterialFlatButton : Button, IMaterialControl
-    {
+namespace MaterialSkin.Controls {
+    public class MaterialFlatButton : Button, IMaterialControl {
         [Browsable(false)]
         public int Depth { get; set; }
         [Browsable(false)]
@@ -17,25 +15,23 @@ namespace MaterialSkin.Controls
         [Browsable(false)]
         public MouseState MouseState { get; set; }
         public bool Primary { get; set; }
+        public bool textAllCaps = true;
 
         private readonly AnimationManager animationManager;
         private readonly AnimationManager hoverAnimationManager;
 
         private SizeF textSize;
 
-        public MaterialFlatButton()
-        {
+        public MaterialFlatButton() {
             Primary = false;
 
-            animationManager = new AnimationManager(false)
-            {
+            animationManager = new AnimationManager(false) {
                 Increment = 0.03,
                 AnimationType = AnimationType.EaseOut
             };
-            hoverAnimationManager = new AnimationManager
-            {
+            hoverAnimationManager = new AnimationManager {
                 Increment = 0.07,
-                AnimationType = AnimationType.Linear
+                AnimationType = AnimationType.EaseOut
             };
 
             hoverAnimationManager.OnAnimationProgress += sender => Invalidate();
@@ -47,11 +43,9 @@ namespace MaterialSkin.Controls
             Padding = new Padding(0);
         }
 
-        public override string Text
-        {
+        public override string Text {
             get { return base.Text; }
-            set
-            {
+            set {
                 base.Text = value;
                 textSize = CreateGraphics().MeasureString(value.ToUpper(), SkinManager.ROBOTO_MEDIUM_10);
                 if (AutoSize)
@@ -60,8 +54,7 @@ namespace MaterialSkin.Controls
             }
         }
 
-        protected override void OnPaint(PaintEventArgs pevent)
-        {
+        protected override void OnPaint(PaintEventArgs pevent) {
             var g = pevent.Graphics;
             g.TextRenderingHint = TextRenderingHint.AntiAlias;
 
@@ -73,65 +66,59 @@ namespace MaterialSkin.Controls
                 g.FillRectangle(b, ClientRectangle);
 
             //Ripple
-            if (animationManager.IsAnimating())
-            {
+            if (animationManager.IsAnimating()) {
                 g.SmoothingMode = SmoothingMode.AntiAlias;
-                for (int i = 0; i < animationManager.GetAnimationCount(); i++)
-                {
+                for (int i = 0; i < animationManager.GetAnimationCount(); i++) {
                     var animationValue = animationManager.GetProgress(i);
                     var animationSource = animationManager.GetSource(i);
 
-                    using (Brush rippleBrush = new SolidBrush(Color.FromArgb((int)(101 - (animationValue * 100)), Color.Black)))
-                    {
+                    using (Brush rippleBrush = new SolidBrush(Color.FromArgb((int)(101 - (animationValue * 100)), Color.Black))) {
                         var rippleSize = (int)(animationValue * Width * 2);
                         g.FillEllipse(rippleBrush, new Rectangle(animationSource.X - rippleSize / 2, animationSource.Y - rippleSize / 2, rippleSize, rippleSize));
                     }
                 }
                 g.SmoothingMode = SmoothingMode.None;
             }
-			g.DrawString(Text.ToUpper(), SkinManager.ROBOTO_MEDIUM_10, Enabled ? (Primary ? SkinManager.ColorScheme.PrimaryBrush : SkinManager.GetPrimaryTextBrush()) : SkinManager.GetFlatButtonDisabledTextBrush(), ClientRectangle, new StringFormat { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center });
+            g.DrawString(textAllCaps ? Text.ToUpper() : Text,
+                SkinManager.ROBOTO_MEDIUM_10,
+                Enabled ? (Primary ? SkinManager.ColorScheme.PrimaryBrush : SkinManager.GetPrimaryTextBrush())
+                    : SkinManager.GetFlatButtonDisabledTextBrush(),
+                ClientRectangle,
+                new StringFormat { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center });
         }
 
-        private Size GetPreferredSize()
-        {
+        private Size GetPreferredSize() {
             return GetPreferredSize(new Size(0, 0));
         }
 
-        public override Size GetPreferredSize(Size proposedSize)
-        {
-            return new Size((int) textSize.Width + 8, 36);
+        public override Size GetPreferredSize(Size proposedSize) {
+            return new Size((int)textSize.Width + 8, 36);
         }
 
-        protected override void OnCreateControl()
-        {
+        protected override void OnCreateControl() {
             base.OnCreateControl();
             if (DesignMode) return;
 
             MouseState = MouseState.OUT;
-            MouseEnter += (sender, args) =>
-            {
+            MouseEnter += (sender, args) => {
                 MouseState = MouseState.HOVER;
                 hoverAnimationManager.StartNewAnimation(AnimationDirection.In);
                 Invalidate();
             };
-            MouseLeave += (sender, args) =>
-            {
+            MouseLeave += (sender, args) => {
                 MouseState = MouseState.OUT;
                 hoverAnimationManager.StartNewAnimation(AnimationDirection.Out);
                 Invalidate();
             };
-            MouseDown += (sender, args) =>
-            {
-                if (args.Button == MouseButtons.Left)
-                {
+            MouseDown += (sender, args) => {
+                if (args.Button == MouseButtons.Left) {
                     MouseState = MouseState.DOWN;
 
                     animationManager.StartNewAnimation(AnimationDirection.In, args.Location);
                     Invalidate();
                 }
             };
-            MouseUp += (sender, args) =>
-            {
+            MouseUp += (sender, args) => {
                 MouseState = MouseState.HOVER;
 
                 Invalidate();

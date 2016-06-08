@@ -73,49 +73,52 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AutoClosingMessageBox.cs" />
-    <Compile Include="ElectrumMain.cs">
+    <Compile Include="Controls\OptionsBar.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\AutoClosingMessageBox.cs" />
+    <Compile Include="Forms\ElectrumMain.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Extensions.cs" />
     <Compile Include="FileTypes.cs" />
-    <Compile Include="FindBar.cs">
+    <Compile Include="Controls\FindBar.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="FindBar.designer.cs">
+    <Compile Include="Controls\FindBar.designer.cs">
       <DependentUpon>FindBar.cs</DependentUpon>
     </Compile>
     <Compile Include="Functions.cs" />
-    <Compile Include="GifViewer.cs">
+    <Compile Include="Forms\GifViewer.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="KeithForm.cs">
+    <Compile Include="Forms\KeithForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="KnownFolders.cs" />
-    <Compile Include="MainForm.cs">
+    <Compile Include="Forms\MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="PhotoViewer.cs">
+    <Compile Include="Forms\PhotoViewer.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StudioContext.cs" />
-    <Compile Include="Toast.cs">
+    <Compile Include="Forms\Toast.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Tools.cs" />
-    <EmbeddedResource Include="FindBar.resx">
+    <EmbeddedResource Include="Controls\FindBar.resx">
       <DependentUpon>FindBar.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="GifViewer.resx">
+    <EmbeddedResource Include="Forms\GifViewer.resx">
       <DependentUpon>GifViewer.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="MainForm.resx">
+    <EmbeddedResource Include="Forms\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="PhotoViewer.resx">
+    <EmbeddedResource Include="Forms\PhotoViewer.resx">
       <DependentUpon>PhotoViewer.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">

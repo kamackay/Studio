@@ -14,10 +14,10 @@ namespace Electrum {
         public KeithForm() {
             InitializeComponent();
             materialSkinManager = MaterialSkinManager.Instance;
-            materialSkinManager.AddFormToManage(this); 
+            materialSkinManager.AddFormToManage(this);
             materialSkinManager.Theme = MaterialSkinManager.Themes.DARK;
             materialSkinManager.ColorScheme = new ColorScheme(Primary.Yellow400,
-                Primary.MetroDark, 
+                Primary.MetroDark,
                 Primary.Yellow600,
                 Accent.Yellow400,
                 TextShade.BLACK);
@@ -26,7 +26,7 @@ namespace Electrum {
         public Action initialActions = null;
 
         private void init() {
-            this._(() => {  });
+            this._(() => { });
             F.async(() => {
                 try {
                     if (initialActions != null) {
@@ -79,13 +79,17 @@ namespace Electrum {
             Icon = Properties.Resources.keithapps;
             KeyPreview = true;
             MinimumSize = new Size(50, 100);
-            KeyPress += delegate (object o, KeyPressEventArgs args) {
-                this._(() => { });
+            KeyDown += delegate (object o, KeyEventArgs args) {
+                F.async(() => {
+                if (args.Control) {
+                        if (args.KeyCode == Keys.O) this.f();
+                    }
+                });
             };
             init();
         }
 
-        static readonly IntPtr o = (IntPtr)0x4F;
+        protected static readonly IntPtr o = (IntPtr)0x4F;
 
         protected override void WndProc(ref Message m) {
             if (m.Msg == 0x100 || m.Msg == 0x104) {

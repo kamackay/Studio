@@ -145,7 +145,7 @@ namespace Global {
                 f.runOnUiThread(() => { f.Close(); });
                 StudioContext.getCurrentInstance().formClosed(f);
             });
-            
+
         }
 
         public static void colorStrings(this RichTextBox box, Color? color = null) {
@@ -246,6 +246,8 @@ namespace Global {
                 }
             });
         }
+
+        public static void onClick(this Control control, Action a) { control.Click += delegate { a(); }; }
 
     }
 
