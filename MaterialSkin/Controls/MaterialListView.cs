@@ -1,15 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace MaterialSkin.Controls
-{
-	public class MaterialListView : ListView, IMaterialControl
+namespace MaterialSkin.Controls {
+    public class MaterialListView : ListView, IMaterialControl
 	{
 		[Browsable(false)]
 		public int Depth { get; set; }

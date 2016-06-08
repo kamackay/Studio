@@ -12,8 +12,7 @@ namespace Electrum {
             pictureBox1.Height = 20;
             textBox1.ForeColor = Color.White;
             textBox1.TextChanged += delegate {
-                EventHandler<SearchEventArgs> handler = SearchChanged;
-                if (handler != null) handler(this, new SearchEventArgs { text = textBox1.Text });
+                SearchChanged?.Invoke(this, new SearchEventArgs { text = textBox1.Text });
             };
             Height = 20;
             pictureBox1.MouseClick += delegate (object o, MouseEventArgs args) {
