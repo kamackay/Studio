@@ -41,7 +41,6 @@ namespace Electrum {
             components = new System.ComponentModel.Container();
             AutoScaleMode = AutoScaleMode.Font;
             Text = "Welcome to Electrum Studios";
-
             openFileButton = new MaterialRaisedButton();
             openFileButton.AutoSize = true;
             openFileButton.AutoSizeMode = AutoSizeMode.GrowAndShrink;
@@ -52,6 +51,7 @@ namespace Electrum {
             openFileButton.Location = new Point(20, 20 + t);
             openFileButton.Padding = new Padding(20, 10, 20, 10);
             openFileButton.ForeColor = Color.White;
+            openFileButton.Primary = true;
             openFileButton.Click += this.f;
             Controls.Add(openFileButton);
         }

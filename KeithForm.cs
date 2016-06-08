@@ -13,17 +13,18 @@ namespace Electrum {
     public abstract partial class KeithForm : MaterialForm {
         public KeithForm() {
             InitializeComponent();
-            init();
             materialSkinManager = MaterialSkinManager.Instance;
-            materialSkinManager.AddFormToManage(this);
+            materialSkinManager.AddFormToManage(this); 
             materialSkinManager.Theme = MaterialSkinManager.Themes.DARK;
-            materialSkinManager.ColorScheme = new ColorScheme(Primary.BlueGrey800, Primary.BlueGrey900, Primary.BlueGrey500, Accent.LightBlue200, TextShade.WHITE);
+            materialSkinManager.ColorScheme = new ColorScheme(Primary.Yellow400, Primary.MetroDark, 
+                Primary.Yellow600, Accent.Yellow400, TextShade.BLACK);
         }
         private readonly MaterialSkinManager materialSkinManager;
         public Action initialActions = null;
 
         private void init() {
-            F.runAsync(() => {
+            this._(() => {  });
+            F.async(() => {
                 try {
                     if (initialActions != null) {
                         Thread.Sleep(100);
@@ -74,9 +75,11 @@ namespace Electrum {
             Padding = new Padding(0);
             Icon = Properties.Resources.keithapps;
             KeyPreview = true;
+            MinimumSize = new Size(50, 100);
             KeyPress += delegate (object o, KeyPressEventArgs args) {
                 this._(() => { });
             };
+            init();
         }
 
         static readonly IntPtr o = (IntPtr)0x4F;
