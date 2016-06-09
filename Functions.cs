@@ -100,7 +100,7 @@ namespace Electrum {
         static extern int GetWindowThreadProcessId(IntPtr h_Wnd, out int ProcID);
 
         #endregion
-        
+
 
         /// <summary>
         /// If there is no yet any program associated with SQL files -> set SqlBuilder as handler for SQL files (create s_NewKey)
@@ -267,7 +267,7 @@ namespace Electrum {
                 return;
 
             //if (s_Path.EndsWith(Defaults.DelSysObj)) // Skip deleted files
-              //  return;
+            //  return;
 
             string[] s_Files = Directory.GetFiles(s_Path, s_Filter);
             foreach (string s_File in s_Files) {
@@ -736,12 +736,15 @@ namespace Electrum {
         }
 
         public static Thread async(Action runnable) {
-            return runAsync(runnable);
+            Thread t = new Thread(new ThreadStart(runnable));
+            t.IsBackground = true;
+            t.Start();
+            return t;
         }
 
         public static string paramsToString(string[] args) {
             StringBuilder sb = new StringBuilder();
-            foreach (string s in args) sb.Append(s.Any(x => char.IsWhiteSpace(x)) ? string.Format("\"{0}\" ", s + " ") : s);
+            foreach (string s in args) sb.Append(s.Any(x => char.IsWhiteSpace(x)) ? string.Format("\"{0}\" ", s) : s + " ");
             return sb.ToString().Trim();
         }
     }

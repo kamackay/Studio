@@ -2,8 +2,8 @@
 
 namespace Electrum {
     public static class FileTypes {
-        public static string[] image = new string[] { ".png", ".jpeg", ".jpg", ".webp", ".bmp", ".ico", ".tiff", ".svg", ".gif" };
-        public static string[] audio = new string[] { ".mp3", ".ogg", ".wav" };
+        public static string[] image = new string[] { ".png", ".jpeg", ".jpg", ".webp", ".bmp", ".ico", ".tiff", ".tif", ".svg", ".gif" };
+        public static string[] audio = new string[] { ".mp3", ".ogg", ".wav" };//Not currently working in Studio
         public static string[] code = new string[] { ".cs" };
         public static string[] browserBased = new string[] { ".pdf", ".html" };
 

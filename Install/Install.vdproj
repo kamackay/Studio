@@ -21,14 +21,20 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_5CE974984308C8D6D81414B34059C429"
+        "MsmKey" = "8:_03D9F55E4B6F16E73A8401E9051C91A8"
         "OwnerKey" = "8:_880612E299A6427581B5BB7EB27E1C82"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_5CE974984308C8D6D81414B34059C429"
-        "OwnerKey" = "8:_ABAFAAEE46F625FC8BD3C31387C4C5F2"
+        "MsmKey" = "8:_211621E2F6773BB2620472524E118C3E"
+        "OwnerKey" = "8:_880612E299A6427581B5BB7EB27E1C82"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_211621E2F6773BB2620472524E118C3E"
+        "OwnerKey" = "8:_B389990B302609A1A0C79ABA275EDDAE"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -39,25 +45,31 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_8D7AF31B9EFA7168D61716BA30301B4F"
-        "OwnerKey" = "8:_5CE974984308C8D6D81414B34059C429"
+        "MsmKey" = "8:_A9F158EBD7D6483499E1ED5C75D76528"
+        "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_8D7AF31B9EFA7168D61716BA30301B4F"
-        "OwnerKey" = "8:_ABAFAAEE46F625FC8BD3C31387C4C5F2"
+        "MsmKey" = "8:_B1ACF015896197B62AE2B9F45873ECF7"
+        "OwnerKey" = "8:_211621E2F6773BB2620472524E118C3E"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_8D7AF31B9EFA7168D61716BA30301B4F"
+        "MsmKey" = "8:_B1ACF015896197B62AE2B9F45873ECF7"
+        "OwnerKey" = "8:_B389990B302609A1A0C79ABA275EDDAE"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_B1ACF015896197B62AE2B9F45873ECF7"
         "OwnerKey" = "8:_880612E299A6427581B5BB7EB27E1C82"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_ABAFAAEE46F625FC8BD3C31387C4C5F2"
+        "MsmKey" = "8:_B389990B302609A1A0C79ABA275EDDAE"
         "OwnerKey" = "8:_880612E299A6427581B5BB7EB27E1C82"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -82,19 +94,25 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_ABAFAAEE46F625FC8BD3C31387C4C5F2"
+        "OwnerKey" = "8:_B389990B302609A1A0C79ABA275EDDAE"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_5CE974984308C8D6D81414B34059C429"
+        "OwnerKey" = "8:_211621E2F6773BB2620472524E118C3E"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_8D7AF31B9EFA7168D61716BA30301B4F"
+        "OwnerKey" = "8:_B1ACF015896197B62AE2B9F45873ECF7"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_03D9F55E4B6F16E73A8401E9051C91A8"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -154,6 +172,14 @@
             "PrerequisitesLocation" = "2:1"
             "Url" = "8:"
             "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.5"
+                    {
+                    "Name" = "8:Microsoft .NET Framework 4.5 (x86 and x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.5"
+                    }
+                }
             }
         }
     }
@@ -215,14 +241,45 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_5CE974984308C8D6D81414B34059C429"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_03D9F55E4B6F16E73A8401E9051C91A8"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:MaterialSkin, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_03D9F55E4B6F16E73A8401E9051C91A8"
+                    {
+                    "Name" = "8:MaterialSkin.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:MaterialSkin.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_F9E0177EAE36482CADC7447B2E2A5673"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_211621E2F6773BB2620472524E118C3E"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
             "AssemblyAsmDisplayName" = "8:CefSharp.Core, Version=49.0.1.0, Culture=neutral, PublicKeyToken=40c4b6fc221f4138, processorArchitecture=AMD64"
                 "ScatterAssemblies"
                 {
-                    "_5CE974984308C8D6D81414B34059C429"
+                    "_211621E2F6773BB2620472524E118C3E"
                     {
                     "Name" = "8:CefSharp.Core.dll"
                     "Attributes" = "3:512"
@@ -246,14 +303,34 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_8D7AF31B9EFA7168D61716BA30301B4F"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_A9F158EBD7D6483499E1ED5C75D76528"
+            {
+            "SourcePath" = "8:..\\electrum.ico"
+            "TargetName" = "8:electrum.ico"
+            "Tag" = "8:"
+            "Folder" = "8:_F9E0177EAE36482CADC7447B2E2A5673"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_B1ACF015896197B62AE2B9F45873ECF7"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
             "AssemblyAsmDisplayName" = "8:CefSharp, Version=49.0.1.0, Culture=neutral, PublicKeyToken=40c4b6fc221f4138, processorArchitecture=AMD64"
                 "ScatterAssemblies"
                 {
-                    "_8D7AF31B9EFA7168D61716BA30301B4F"
+                    "_B1ACF015896197B62AE2B9F45873ECF7"
                     {
                     "Name" = "8:CefSharp.dll"
                     "Attributes" = "3:512"
@@ -277,14 +354,14 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_ABAFAAEE46F625FC8BD3C31387C4C5F2"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_B389990B302609A1A0C79ABA275EDDAE"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
             "AssemblyAsmDisplayName" = "8:CefSharp.WinForms, Version=49.0.1.0, Culture=neutral, PublicKeyToken=40c4b6fc221f4138, processorArchitecture=AMD64"
                 "ScatterAssemblies"
                 {
-                    "_ABAFAAEE46F625FC8BD3C31387C4C5F2"
+                    "_B389990B302609A1A0C79ABA275EDDAE"
                     {
                     "Name" = "8:CefSharp.WinForms.dll"
                     "Attributes" = "3:512"
@@ -310,7 +387,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_D7C2EEFE18DC4ADEBA741D5CD4397B2A"
             {
-            "SourcePath" = "8:..\\..\\..\\Google Drive\\Dev\\Pictures\\Icons\\studio.ico"
+            "SourcePath" = "8:C:\\Google Drive\\Dev\\Pictures\\Icons\\studio.ico"
             "TargetName" = "8:studio.ico"
             "Tag" = "8:"
             "Folder" = "8:_F9E0177EAE36482CADC7447B2E2A5673"
@@ -394,9 +471,9 @@
         "Product"
         {
         "Name" = "8:Microsoft Visual Studio"
-        "ProductName" = "8:Studio"
+        "ProductName" = "8:Electrum"
         "ProductCode" = "8:{0178596E-6416-4E4F-AF16-2851F0131F4A}"
-        "PackageCode" = "8:{A276CA22-46B9-476A-A5B8-81EDCB68EC64}"
+        "PackageCode" = "8:{E61140B5-3460-4771-8C18-36FBD4A35202}"
         "UpgradeCode" = "8:{67946B59-7759-45DD-846F-80BA0F6D38E6}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
@@ -412,7 +489,7 @@
         "ARPCONTACT" = "8:Keith MacKay"
         "Keywords" = "8:"
         "ARPCOMMENTS" = "8:"
-        "ARPURLINFOABOUT" = "8:www.keithmackay.com"
+        "ARPURLINFOABOUT" = "8:http://www.keithmackay.com"
         "ARPPRODUCTICON" = "8:_D7C2EEFE18DC4ADEBA741D5CD4397B2A"
         "ARPIconIndex" = "3:0"
         "SearchPath" = "8:"
@@ -541,7 +618,7 @@
                                         {
                                             "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_AC99D2D6887F4025B2D9B31F2FD7A3F0"
                                             {
-                                            "Name" = "8:KeithAppsStudio"
+                                            "Name" = "8:Electrum Studio"
                                             "Condition" = "8:"
                                             "AlwaysCreate" = "11:FALSE"
                                             "DeleteAtUninstall" = "11:TRUE"
@@ -566,7 +643,7 @@
                                                             "Condition" = "8:"
                                                             "Transitive" = "11:FALSE"
                                                             "ValueTypes" = "3:1"
-                                                            "Value" = "8:C:\\Program Files\\KeithApps\\Studio\\Studio.exe %1"
+                                                            "Value" = "8:C:\\Program Files\\KeithApps\\Electrum\\electrum.exe %1"
                                                             }
                                                         }
                                                     }
@@ -579,7 +656,7 @@
                                                     "Condition" = "8:"
                                                     "Transitive" = "11:FALSE"
                                                     "ValueTypes" = "3:1"
-                                                    "Value" = "8:C:\\Program Files\\KeithApps\\Studio\\Studio.exe"
+                                                    "Value" = "8:C:\\Program Files\\KeithApps\\Electrum\\electrum.exe"
                                                     }
                                                     "{ADCFDA98-8FDD-45E4-90BC-E3D20B029870}:_E02FC0A3ADA046199156DA6CAC513826"
                                                     {
@@ -587,7 +664,7 @@
                                                     "Condition" = "8:"
                                                     "Transitive" = "11:FALSE"
                                                     "ValueTypes" = "3:1"
-                                                    "Value" = "8:Open With KeithApps Studio"
+                                                    "Value" = "8:Open With Electrum Studio"
                                                     }
                                                 }
                                             }
@@ -637,7 +714,7 @@
             "Target" = "8:_880612E299A6427581B5BB7EB27E1C82"
             "Folder" = "8:_AC96FE49EDBA403A883B7B848A6C0A72"
             "WorkingFolder" = "8:_AC96FE49EDBA403A883B7B848A6C0A72"
-            "Icon" = "8:_D7C2EEFE18DC4ADEBA741D5CD4397B2A"
+            "Icon" = "8:_A9F158EBD7D6483499E1ED5C75D76528"
             "Feature" = "8:"
             }
             "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_FF43F9B2ABE5433890A65A78D1B73E9F"

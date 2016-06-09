@@ -250,7 +250,7 @@ namespace Electrum {
                 (int)(Screen.PrimaryScreen.WorkingArea.Height / 1.25f));
             Shown += MainForm_Shown;
             Font = f;
-            Icon = Properties.Resources.browserIcon;
+            Icon = Properties.Resources.electrum;
             Controls.Add(browser);
             Resize += delegate {
                 this.runOnUiThread(() => {
@@ -531,11 +531,17 @@ namespace Electrum {
             }
         }
 
+        /// <summary>
+        /// Run on the UI Thread
+        /// </summary>
+        /// <param name="control"></param>
+        /// <param name="runnable"></param>
         public static void sync(this Control control, Action runnable) {
             try {
-                control.Invoke(runnable);
+                if (control.InvokeRequired) control.Invoke(runnable);
+                else runnable.Invoke();
             } catch /**/ (Exception e) /**/ {
-                MessageBox.Show("error");
+                MessageBox.Show(string.Format("error: {0}", e.Message));
                 //Eat the exception
             }
         }

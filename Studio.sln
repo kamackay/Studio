@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Studio", "Studio.csproj", "{C09C4106-CA89-4FAF-B743-406F1F5976BE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Electrum", "Electrum.csproj", "{C09C4106-CA89-4FAF-B743-406F1F5976BE}"
 EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Install", "Install\Install.vdproj", "{4AED7E23-F855-4A18-ACA7-4C55043B98E8}"
 EndProject

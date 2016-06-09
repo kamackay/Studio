@@ -247,6 +247,10 @@ namespace Global {
             });
         }
 
+        public static string[] trimAll(this string[] strings, bool removeQuotes = true) {
+            for (int i = 0; i < strings.Length; i++) strings[i] = strings[i].Replace("\"", "").Trim(); return strings;
+        }
+
         public static void onClick(this Control control, Action a) { control.Click += delegate { a(); }; }
 
     }

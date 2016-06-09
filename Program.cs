@@ -16,12 +16,12 @@ namespace Electrum {
         static void Main(string[] args) {
 
             bool createdNew = false;
-            using (Mutex mutex = new Mutex(true, "Electrum", out createdNew)) {
+            using (Mutex mutex = new Mutex(true, Application.ProductName, out createdNew)) {
                 if (createdNew) Run(args);
                 else {
                     Process current = Process.GetCurrentProcess();
                     foreach (Process process in Process.GetProcessesByName(current.ProcessName)) {
-                        if (process.Id != current.Id && process.ProcessName.Equals(current.ProcessName)) {
+                        if (process.Id != current.Id && (process.ProcessName.Equals(current.ProcessName) || process.MainModule.FileName.Equals(current.MainModule.FileName))) {
                             // Application is already running, will need to pass any given data to it
                             using (NamedPipeClientStream pipeStream = new NamedPipeClientStream(".", Application.ProductName, PipeDirection.Out)) {
                                 pipeStream.Connect();

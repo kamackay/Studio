@@ -117,6 +117,7 @@ namespace Electrum {
                     b = new Bitmap(b, s);// Resize the bitmap so that needlessly large images can still be loaded
                     BackgroundImage = b;
                     img = b;
+                    postImageSet();
                 } else {
                     Bitmap b = new Bitmap(p);
                     Size s = Shrink(b.Size);
@@ -139,9 +140,9 @@ namespace Electrum {
 
         void postImageSet() {
             this.runOnUiThread(() => { Focus(); BringToFront(); Show(); Activate(); });
-            F.runAsync(() => { Thread.Sleep(100); this.runOnUiThread(() => { TopMost = false; }); });
+            F.async(() => { Thread.Sleep(100); this.runOnUiThread(() => { TopMost = false; }); });
             Bitmap b = new Bitmap(img);
-            Thread t = F.runAsync(() => {
+            Thread t = F.async(() => {
                 if (b.isMostlyBlack())
                     this.runOnUiThread(() => { BackColor = Color.White; });
                 showLoading(false);
@@ -276,7 +277,7 @@ namespace Electrum {
         }
 
         private void CloseButton_Click(object sender, EventArgs e) {
-            Environment.Exit(0);
+            Close();
         }
         protected override void OnPaint(PaintEventArgs e) {
             base.OnPaint(e);
@@ -436,7 +437,7 @@ namespace Electrum {
             Controls.Add(loadingImage);
             Controls.Add(CloseButton);
             FormBorderStyle = FormBorderStyle.None;
-            Icon = ((Icon)(resources.GetObject("$this.Icon")));
+            Icon = Properties.Resources.electrum;
             Name = "PhotoViewer";
             MouseClick += new MouseEventHandler(PhotoViewer_MouseClick);
             MouseDown += new MouseEventHandler(This_MouseDown);

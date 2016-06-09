@@ -1,7 +1,10 @@
-﻿using System;
+﻿using Global;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Pipes;
+using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows.Forms;
 
@@ -23,11 +26,11 @@ namespace Electrum {
         private void init(string[] args) {
             openForms = new List<Form>();
             settings = Settings.getDefault();
-            F.runAsync(() => {/**/
+            F.async(() => {/**/
                 while (runBackground) {
                     try {
                         Thread.Sleep(5000);
-                        if (openForms.Count == 0) Environment.Exit(0);
+                        if (openForms.Count == 0 || Application.OpenForms.Count == 0) Environment.Exit(0);
                     } catch { }
                 }/**/
             });
@@ -40,7 +43,7 @@ namespace Electrum {
                                 //Read in data from other instances of this application
                                 while (!reader.EndOfStream) {
                                     string s = reader.ReadLine();
-                                    MessageBox.Show(s);
+                                    Application.OpenForms[0].sync(() => { otherProcessCommand(Regex.Matches(s, @"[\""].+?[\""]|[^ ]+").Cast<Match>().Select(m => m.Value.Trim()).ToList().ToArray()); });
                                 }
                             }
                         }
@@ -54,6 +57,7 @@ namespace Electrum {
         public Settings settings;
 
         private void openForm(string[] args) {
+            args = args.trimAll();
             List<string> parameters = new List<string>(), arguments = new List<string>();
             foreach (string temp in args) {
                 if (temp.StartsWith("--")) parameters.Add(temp.ToLower());
@@ -61,16 +65,18 @@ namespace Electrum {
             }
             if (parameters.Contains("--picture")) settings.picture = true;
             if (arguments.Count > 0) {
-                if (System.IO.File.Exists(arguments[0])) {
-                    if (FileTypes.isImage(arguments[0])) settings.picture = true;
-                } else AutoClosingMessageBox.show("Unexpected Parameter: " + arguments[0], "Studio");
+                if (File.Exists(arguments[0].Trim())) {
+                    if (FileTypes.isImage(arguments[0].Trim())) settings.picture = true;
+                } else {
+                    MessageBox.Show("Unexpected Parameter: " + arguments[0].Trim(), "Electrum");
+                    Environment.Exit(1);
+                }
             }
             if (settings.picture) {
                 try {
                     if (arguments.Count > 0 && ".gif".Equals(System.IO.Path.GetExtension(arguments[0]))) {
                         GifViewer f = new GifViewer(arguments[0]);
                         f.FormClosing += delegate {
-                            if (openForms.Count == 1) Application.Exit();
                             openForms.Remove(f);
                         };
                         openForms.Add(f);
@@ -78,13 +84,11 @@ namespace Electrum {
                     } else {
                         PhotoViewer f = arguments.Count > 0 ? new PhotoViewer(arguments[0]) : new PhotoViewer();
                         f.FormClosing += delegate {
-                            if (openForms.Count == 1) Application.Exit();
                             openForms.Remove(f);
                         };
                         f.subFormOpened += delegate (object o, PhotoViewer.FormOpenEventArgs arg) {
                             openForms.Add(arg.subForm);
                             arg.subForm.FormClosing += delegate {
-                                if (openForms.Count == 1) Application.Exit();
                                 openForms.Remove(arg.subForm);
                             };
                         };
@@ -96,19 +100,24 @@ namespace Electrum {
                 try {
                     ElectrumMain f = new ElectrumMain();
                     f.FormClosing += delegate {
-                        if (openForms.Count == 1) Application.Exit();
                         openForms.Remove(f);
                     };
                     f.subFormOpened += delegate (object o, KeithForm.FormOpenEventArgs arg) {
                         openForms.Add(arg.subForm);
                         arg.subForm.FormClosing += delegate {
-                            if (openForms.Count == 1) Application.Exit();
                             openForms.Remove(arg.subForm);
                         };
                     };
                     openForms.Add(f);
                     f.Show();
                 } catch (Exception e) { MessageBox.Show("Error: " + e.Message); }
+            }
+        }
+
+        public void otherProcessCommand(string[] args) {
+            args = args.trimAll();
+            if (args.Length == 1) {
+                if (File.Exists(args[0])) openFile(args[0]);
             }
         }
 
@@ -127,14 +136,12 @@ namespace Electrum {
 
         void openForm(Form f) {
             f.FormClosing += delegate {
-                if (openForms.Count == 1) Application.Exit();
                 openForms.Remove(f);
             };
             if (f is KeithForm)
                 ((KeithForm)f).subFormOpened += delegate (object o, KeithForm.FormOpenEventArgs arg) {
                     openForms.Add(arg.subForm);
                     arg.subForm.FormClosing += delegate {
-                        if (openForms.Count == 1) Application.Exit();
                         openForms.Remove(arg.subForm);
                     };
                 };
@@ -156,6 +163,18 @@ namespace Electrum {
             }
 
             // Handle all filetypes here
+            handleFile(filename);
+        }
+
+        public void handleFile(string filename, Form f = null) {
+            if (FileTypes.isImage(filename)) {
+                if (string.Equals(".gif", Path.GetExtension(filename), StringComparison.OrdinalIgnoreCase)) openForm(new GifViewer(filename));
+                else openForm(new PhotoViewer(filename));
+            } else if (FileTypes.shouldOpenInBrowser(filename)) {
+                openForm(new MainForm(filename));
+            } else if (FileTypes.isAudio(filename)) {
+
+            }
         }
 
         private List<Form> openForms;
