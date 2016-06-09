@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
@@ -99,146 +100,7 @@ namespace Electrum {
         static extern int GetWindowThreadProcessId(IntPtr h_Wnd, out int ProcID);
 
         #endregion
-
-        /// <summary>
-        /// Use DebugView from www.sysinternals.com to see this debug output
-        /// </summary>
-       /*
-        public static void PrintDebug(string s_Text, Type t_Origin) {
-            if (t_Origin == Defaults.DebugType)
-                OutputDebugStringA(s_Text);
-        }
-        public static void PrintDebug(string s_Format, object o_Para1, Type t_Origin) {
-            if (t_Origin == Defaults.DebugType)
-                OutputDebugStringA(string.Format(s_Format, o_Para1));
-        }
-        public static void PrintDebug(string s_Format, object o_Para1, object o_Para2, Type t_Origin) {
-            if (t_Origin == Defaults.DebugType)
-                OutputDebugStringA(string.Format(s_Format, o_Para1, o_Para2));
-        }
-        public static void PrintDebug(string s_Format, object o_Para1, object o_Para2, object o_Para3, Type t_Origin) {
-            if (t_Origin == Defaults.DebugType)
-                OutputDebugStringA(string.Format(s_Format, o_Para1, o_Para2, o_Para3));
-        }
-        public static void PrintDebug(string s_Format, object o_Para1, object o_Para2, object o_Para3, object o_Para4, Type t_Origin) {
-            if (t_Origin == Defaults.DebugType)
-                OutputDebugStringA(string.Format(s_Format, o_Para1, o_Para2, o_Para3, o_Para4));
-        }*/
-
-        // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-        // Read / write personal settings to Registry main key
-        // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-        /*
-        private static string GetRegPath(eReg e_Registry) {
-            string s_Path = ms_RegistryRoot;
-            if (e_Registry == eReg.Main)
-                return s_Path;
-
-            //s_Path += @"\WorkDirs\" + frmMain.WorkDir.Replace("\\", "/");
-            if (e_Registry == eReg.WorkDir)
-                return s_Path;
-
-            //ListViewEx.kItem k_Item = frmMain.SelectedFile;
-            return e_Regi
-        }
-
-        public static void RegistryWrite(eReg e_Registry, string s_Name, object o_Value) {
-            RegistryKey i_Key = Registry.CurrentUser.CreateSubKey(GetRegPath(e_Registry));
-            i_Key.SetValue(s_Name, o_Value);
-            i_Key.Close();
-        }
         
-        public static object RegistryRead(eReg e_Registry, string s_Name, object o_Default) {
-            RegistryKey i_Key = Registry.CurrentUser.OpenSubKey(GetRegPath(e_Registry));
-            if (i_Key == null)
-                return o_Default;
-
-            object o_Value = i_Key.GetValue(s_Name, o_Default);
-            i_Key.Close();
-            return o_Value;
-        }
-
-        /// <summary>
-        /// Retrieves a list of all working directories
-        /// </summary>
-        public static string[] GetWorkDirectories() {
-            RegistryKey i_Key = Registry.CurrentUser.CreateSubKey(ms_RegistryRoot + @"\WorkDirs");
-            string[] s_Sub = i_Key.GetSubKeyNames();
-
-            for (int i = 0; i < s_Sub.Length; i++) {
-                s_Sub[i] = s_Sub[i].Replace("/", "\\");
-            }
-            return s_Sub;
-        }
-
-        /// <summary>
-        /// Adds or removes a working directory subkey in the Registry
-        /// </summary>
-        public static void AddRemoveWorkDir(bool b_Add, string s_Path) {
-            s_Path = ms_RegistryRoot + @"\WorkDirs\" + s_Path.Replace("\\", "/");
-
-            if (b_Add) Registry.CurrentUser.CreateSubKey(s_Path);
-            else Registry.CurrentUser.DeleteSubKeyTree(s_Path);
-        }
-
-        /// <summary>
-        /// Removes a work state subkey in the Registry
-        /// or delete ALL workstates
-        /// </summary>
-        public static void RemoveWorkState(bool b_RemoveALL) {
-            try {
-                if (b_RemoveALL)
-                    Registry.CurrentUser.DeleteSubKeyTree(GetRegPath(eReg.WorkDir) + @"\WorkStates");
-                else
-                    Registry.CurrentUser.DeleteSubKeyTree(GetRegPath(eReg.WorkState));
-            } catch { }
-        }
-
-        // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-        public static void CreateShortcut(string s_ShortcutPath, string s_ObjectPath, string s_CmdLine, eShowMode e_Mode) {
-            if (Environment.OSVersion.Platform != PlatformID.Win32NT) {
-                // to run this command on Windows 98/ME use IShellLinkA instead!
-                AutoClosingMessageBox.show("CreateShortcut requires NT Platforms!", "Error");
-                return;
-            }
-
-            IShellLinkW i_ShellLink = null;
-            try {
-                i_ShellLink = (IShellLinkW)new ShellLinkObject();
-                i_ShellLink.SetPath(s_ObjectPath);
-                i_ShellLink.SetShowCmd((int)e_Mode);
-                i_ShellLink.SetArguments(s_CmdLine);
-
-                UCOMIPersistFile i_Persist = (UCOMIPersistFile)i_ShellLink;
-                i_Persist.Save(s_ShortcutPath, true);
-            } catch (Exception Ex) { AutoClosingMessageBox.show( "Error creating shortcut:\n" + Ex.Message, "Error"); } finally { Marshal.ReleaseComObject(i_ShellLink); }
-        }
-        
-        /// <summary>
-        /// Creates program shortcuts in Quicklaunch bar and Startmenu\Programs
-        /// this is done only ONCE at the first run of the program
-        /// If the user deletes the shortcuts they will not be created anew
-        /// </summary>
-        public static void CreateShortcuts() {
-            bool b_Created = (int)RegistryRead(eReg.Main, "ShortcutsCreated", 0) == 1;
-
-            string s_Quick = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)
-                           + @"\Microsoft\Internet Explorer\Quick Launch\SqlBuilder.lnk";
-
-            string s_Progs = Environment.GetFolderPath(Environment.SpecialFolder.Programs)
-                           + @"\SqlBuilder.lnk";
-
-            // If the shortcuts already exist -> update them. 
-            // (Maybe the user has moved the Exe to another place on his harddisk)
-            if (!b_Created || File.Exists(s_Quick))
-                CreateShortcut(s_Quick, Application.ExecutablePath, "", eShowMode.Normal);
-
-            if (!b_Created || File.Exists(s_Progs))
-                CreateShortcut(s_Progs, Application.ExecutablePath, "", eShowMode.Normal);
-
-            RegistryWrite(eReg.Main, "ShortcutsCreated", 1);
-        }*/
 
         /// <summary>
         /// If there is no yet any program associated with SQL files -> set SqlBuilder as handler for SQL files (create s_NewKey)
@@ -875,6 +737,12 @@ namespace Electrum {
 
         public static Thread async(Action runnable) {
             return runAsync(runnable);
+        }
+
+        public static string paramsToString(string[] args) {
+            StringBuilder sb = new StringBuilder();
+            foreach (string s in args) sb.Append(s.Any(x => Char.IsWhiteSpace(x)) ? string.Format("\"{0}\"", s) : s);
+            return sb.ToString().Trim();
         }
     }
 }

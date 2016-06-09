@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
+using System.IO;
+using System.IO.Pipes;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows.Forms;
@@ -20,19 +22,22 @@ namespace Electrum {
                     Process current = Process.GetCurrentProcess();
                     foreach (Process process in Process.GetProcessesByName(current.ProcessName)) {
                         if (process.Id != current.Id && process.ProcessName.Equals(current.ProcessName)) {
-                            process.Kill();
-                            process.WaitForExit();
-                            Run(args);
-                            break;
+                            // Application is already running, will need to pass any given data to it
+                            using (NamedPipeClientStream pipeStream = new NamedPipeClientStream(".", Application.ProductName, PipeDirection.Out)) {
+                                pipeStream.Connect();
+                                using (StreamWriter sr = new StreamWriter(pipeStream)) {
+                                    //Pass these parameters to the other application and allow it to handle them
+                                    sr.WriteLine(F.paramsToString(args));
+                                }
+                            }
+                            Environment.Exit(0);
                         }
                     }
                 }
             }
-
-            
         }
 
-        private static void Run(string[] args =  null) {
+        private static void Run(string[] args = null) {
             args = args ?? new string[0];
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);

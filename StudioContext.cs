@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Pipes;
 using System.Threading;
 using System.Windows.Forms;
 
@@ -29,6 +30,22 @@ namespace Electrum {
                         if (openForms.Count == 0) Environment.Exit(0);
                     } catch { }
                 }/**/
+            });
+            F.async(() => {
+                while (runBackground) {
+                    try {
+                        using (NamedPipeServerStream pipeStream = new NamedPipeServerStream(Application.ProductName, PipeDirection.In)) {
+                            pipeStream.WaitForConnection();
+                            using (StreamReader reader = new StreamReader(pipeStream)) {
+                                //Read in data from other instances of this application
+                                while (!reader.EndOfStream) {
+                                    string s = reader.ReadLine();
+                                    MessageBox.Show(s);
+                                }
+                            }
+                        }
+                    } catch { }
+                }
             });
         }
 
