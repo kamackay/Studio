@@ -74,7 +74,7 @@ namespace Electrum {
             }
             if (settings.picture) {
                 try {
-                    if (arguments.Count > 0 && ".gif".Equals(System.IO.Path.GetExtension(arguments[0]))) {
+                    if (arguments.Count > 0 && ".gif".Equals(Path.GetExtension(arguments[0]))) {
                         GifViewer f = new GifViewer(arguments[0]);
                         f.FormClosing += delegate {
                             openForms.Remove(f);
@@ -98,20 +98,29 @@ namespace Electrum {
                 } catch { }
             } else {
                 try {
-                    ElectrumMain f = new ElectrumMain();
-                    f.FormClosing += delegate {
-                        openForms.Remove(f);
-                    };
-                    f.subFormOpened += delegate (object o, KeithForm.FormOpenEventArgs arg) {
-                        openForms.Add(arg.subForm);
-                        arg.subForm.FormClosing += delegate {
-                            openForms.Remove(arg.subForm);
-                        };
-                    };
-                    openForms.Add(f);
-                    f.Show();
+                    if (arguments.Count == 0) openHomeScreen();
+                    else if (arguments.Count == 1) {
+                        if (File.Exists(arguments[0].Trim())) openFile(arguments[0].Trim());
+                        else MessageBox.Show(string.Format("Not sure what to do with '{0}' - It is not a file.", arguments[0]));
+                    }
+                        else openHomeScreen();
                 } catch (Exception e) { MessageBox.Show("Error: " + e.Message); }
             }
+        }
+
+        public void openHomeScreen() {
+            ElectrumMain f = new ElectrumMain();
+            f.FormClosing += delegate {
+                openForms.Remove(f);
+            };
+            f.subFormOpened += delegate (object o, KeithForm.FormOpenEventArgs arg) {
+                openForms.Add(arg.subForm);
+                arg.subForm.FormClosing += delegate {
+                    openForms.Remove(arg.subForm);
+                };
+            };
+            openForms.Add(f);
+            f.Show();
         }
 
         public void otherProcessCommand(string[] args) {
@@ -150,20 +159,22 @@ namespace Electrum {
         }
 
         public void openFile(string filename, Form f = null) {
-            string ext = Path.GetExtension(filename);
-            switch (ext.ToLower()) {
-                default: break;
-                case ".pdf":
-                    if (!(f is MainForm)) openForm(new MainForm(filename));
-                    else openForm(new MainForm(filename)); //I'll work on that later
-                    return;
-                case ".gif":
-                    openForm(new GifViewer(filename));
-                    return;
-            }
+            try {
+                string ext = Path.GetExtension(filename);
+                switch (ext.ToLower()) {
+                    default: break;
+                    case ".pdf":
+                        if (!(f is MainForm)) openForm(new MainForm(filename));
+                        else openForm(new MainForm(filename)); //I'll work on that later
+                        return;
+                    case ".gif":
+                        openForm(new GifViewer(filename));
+                        return;
+                }
 
-            // Handle all filetypes here
-            handleFile(filename);
+                // Handle all filetypes here
+                handleFile(filename);
+            } catch (Exception e) { MessageBox.Show(e.Message, "Electrum Studios error"); }
         }
 
         public void handleFile(string filename, Form f = null) {
