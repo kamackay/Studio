@@ -741,7 +741,7 @@ namespace Electrum {
 
         public static string paramsToString(string[] args) {
             StringBuilder sb = new StringBuilder();
-            foreach (string s in args) sb.Append(s.Any(x => Char.IsWhiteSpace(x)) ? string.Format("\"{0}\"", s) : s);
+            foreach (string s in args) sb.Append(s.Any(x => char.IsWhiteSpace(x)) ? string.Format("\"{0}\" ", s + " ") : s);
             return sb.ToString().Trim();
         }
     }

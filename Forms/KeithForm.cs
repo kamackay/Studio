@@ -76,7 +76,7 @@ namespace Electrum {
             Size screenSize = Screen.PrimaryScreen.WorkingArea.Size;
             Size = new Size((int)(screenSize.Width * .75), (int)(screenSize.Height * .75));
             Padding = new Padding(0);
-            Icon = Properties.Resources.keithapps;
+            Icon = Properties.Resources.electrum;
             KeyPreview = true;
             MinimumSize = new Size(50, 100);
             KeyDown += delegate (object o, KeyEventArgs args) {
