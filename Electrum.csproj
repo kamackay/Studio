@@ -221,6 +221,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="electrum.ico" />
+    <Content Include="FodyWeavers.xml" />
     <None Include="Resources\electrum.png" />
     <None Include="Resources\electrum.ico" />
   </ItemGroup>
@@ -247,9 +248,11 @@
     <Error Condition="!Exists('packages\CefSharp.Common.49.0.1\build\CefSharp.Common.props')" Text="$([System.String]::Format('$(ErrorText)', 'packages\CefSharp.Common.49.0.1\build\CefSharp.Common.props'))" />
     <Error Condition="!Exists('packages\CefSharp.Common.49.0.1\build\CefSharp.Common.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\CefSharp.Common.49.0.1\build\CefSharp.Common.targets'))" />
     <Error Condition="!Exists('packages\CefSharp.WinForms.49.0.1\build\CefSharp.WinForms.props')" Text="$([System.String]::Format('$(ErrorText)', 'packages\CefSharp.WinForms.49.0.1\build\CefSharp.WinForms.props'))" />
+    <Error Condition="!Exists('packages\Fody.1.28.3\build\Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\Fody.1.28.3\build\Fody.targets'))" />
   </Target>
   <Import Project="packages\cef.redist.x86.3.2623.1401\build\cef.redist.x86.targets" Condition="Exists('packages\cef.redist.x86.3.2623.1401\build\cef.redist.x86.targets')" />
   <Import Project="packages\CefSharp.Common.49.0.1\build\CefSharp.Common.targets" Condition="Exists('packages\CefSharp.Common.49.0.1\build\CefSharp.Common.targets')" />
+  <Import Project="packages\Fody.1.28.3\build\Fody.targets" Condition="Exists('packages\Fody.1.28.3\build\Fody.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
