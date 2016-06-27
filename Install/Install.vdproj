@@ -1010,7 +1010,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Electrum"
         "ProductCode" = "8:{0178596E-6416-4E4F-AF16-2851F0131F4A}"
-        "PackageCode" = "8:{1A6CC2A4-EB37-4845-9714-169E01D48011}"
+        "PackageCode" = "8:{99E8A8EE-1F80-445B-B158-C1368C5F4118}"
         "UpgradeCode" = "8:{67946B59-7759-45DD-846F-80BA0F6D38E6}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
@@ -1153,58 +1153,6 @@
                                     "Transitive" = "11:FALSE"
                                         "Keys"
                                         {
-                                            "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_AC99D2D6887F4025B2D9B31F2FD7A3F0"
-                                            {
-                                            "Name" = "8:Electrum Studio"
-                                            "Condition" = "8:"
-                                            "AlwaysCreate" = "11:FALSE"
-                                            "DeleteAtUninstall" = "11:TRUE"
-                                            "Transitive" = "11:FALSE"
-                                                "Keys"
-                                                {
-                                                    "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_86C4A3654E5C4AE886CA3F1FE6DFA8ED"
-                                                    {
-                                                    "Name" = "8:command"
-                                                    "Condition" = "8:"
-                                                    "AlwaysCreate" = "11:FALSE"
-                                                    "DeleteAtUninstall" = "11:TRUE"
-                                                    "Transitive" = "11:FALSE"
-                                                        "Keys"
-                                                        {
-                                                        }
-                                                        "Values"
-                                                        {
-                                                            "{ADCFDA98-8FDD-45E4-90BC-E3D20B029870}:_5B31F40E6ABA48C1BEC2CC05C18B899A"
-                                                            {
-                                                            "Name" = "8:(Default)"
-                                                            "Condition" = "8:"
-                                                            "Transitive" = "11:FALSE"
-                                                            "ValueTypes" = "3:1"
-                                                            "Value" = "8:C:\\Program Files\\KeithApps\\Electrum\\electrum.exe %1"
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                                "Values"
-                                                {
-                                                    "{ADCFDA98-8FDD-45E4-90BC-E3D20B029870}:_7D0F63ADB7134A5FAB3FB679A58213CC"
-                                                    {
-                                                    "Name" = "8:Icon"
-                                                    "Condition" = "8:"
-                                                    "Transitive" = "11:FALSE"
-                                                    "ValueTypes" = "3:1"
-                                                    "Value" = "8:C:\\Program Files\\KeithApps\\Electrum\\electrum.exe"
-                                                    }
-                                                    "{ADCFDA98-8FDD-45E4-90BC-E3D20B029870}:_E02FC0A3ADA046199156DA6CAC513826"
-                                                    {
-                                                    "Name" = "8:(Default)"
-                                                    "Condition" = "8:"
-                                                    "Transitive" = "11:FALSE"
-                                                    "ValueTypes" = "3:1"
-                                                    "Value" = "8:Open With Electrum Studio"
-                                                    }
-                                                }
-                                            }
                                         }
                                         "Values"
                                         {

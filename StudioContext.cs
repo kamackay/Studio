@@ -28,10 +28,12 @@ namespace Electrum {
             settings = Settings.getDefault();
             F.async(() => {/**/
                 while (runBackground) {
+                    Thread.Sleep(5000);
                     try {
-                        Thread.Sleep(5000);
-                        if (openForms.Count == 0 || Application.OpenForms.Count == 0) Environment.Exit(0);
-                    } catch { }
+                        if (openForms.Count == 0 || Application.OpenForms.Count == 0) Application.Exit();
+                    } catch (Exception e) {
+                        MessageBox.Show(e.Message);
+                    }
                 }/**/
             });
             F.async(() => {
@@ -102,8 +104,7 @@ namespace Electrum {
                     else if (arguments.Count == 1) {
                         if (File.Exists(arguments[0].Trim())) openFile(arguments[0].Trim());
                         else MessageBox.Show(string.Format("Not sure what to do with '{0}' - It is not a file.", arguments[0]));
-                    }
-                        else openHomeScreen();
+                    } else openHomeScreen();
                 } catch (Exception e) { MessageBox.Show("Error: " + e.Message); }
             }
         }
@@ -139,7 +140,7 @@ namespace Electrum {
         public void formClosed(Form f = null) {
             try {
                 if (f != null) openForms.Remove(f);
-                if (openForms.Count == 0) System.Environment.Exit(0);
+                if (openForms.Count == 0) Environment.Exit(0);
             } catch { }
         }
 
@@ -154,6 +155,10 @@ namespace Electrum {
                         openForms.Remove(arg.subForm);
                     };
                 };
+            //else if (f is MainForm)
+            //    ((MainForm)f).FormClosed += delegate {
+            //        formClosed(f);
+            //    };
             openForms.Add(f);
             f.Show();
         }
