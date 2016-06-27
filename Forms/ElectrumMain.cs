@@ -1,7 +1,10 @@
 ﻿using Electrum.Controls;
 using Global;
 using MaterialSkin.Controls;
+using System.Diagnostics;
 using System.Drawing;
+using System.IO;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace Electrum {
@@ -42,34 +45,64 @@ namespace Electrum {
             KeyPreview = true;
             Text = "Welcome to Electrum Studios";
             optionsBar = new OptionsBar();
-            openFileButton = new MaterialRaisedButton();
-            openFileButton.AutoSize = true;
-            openFileButton.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-            openFileButton.MouseState = MaterialSkin.MouseState.HOVER;
-            openFileButton.Text = "Open A File";
-            openFileButton.Font = new Font("Product Sans", 15f);
-            openFileButton.UseCompatibleTextRendering = false;
-            openFileButton.Location = new Point(20, 10 + t);
-            openFileButton.Padding = new Padding(20, 10, 20, 10);
-            openFileButton.setTextColor(Color.FromArgb(255, 238, 88));
-            openFileButton.setBackColor(KeithApps.grayColor());
-            openFileButton.Primary = true;
-            openFileButton.Click += this.f;
+            list = new FlowLayoutPanel();
 
             optionsBar.setOptions(new OptionsBar.Option[] {
                 new OptionsBar.Option { title = "Open File", onClick = () => { this.f(); } },
                 new OptionsBar.Option { title = "Exit", onClick = () => { Close(); } },
                 new OptionsBar.Option {holdRight = true, title = "Right",
-                    onClick = () => { } },
+                    onClick = () => { } }/*,
                 new OptionsBar.Option {holdRight = true, title = "Right 2",
-                    onClick = () => { } }
-
+                    onClick = () => { } }/**/
             });
             optionsBar.setBackgroundColor(Color.FromArgb(0x50, 0x50, 0x50));
             Controls.Add(optionsBar);
 
-            Controls.Add(openFileButton);
+            list.Dock = DockStyle.Bottom;
+            list.Height = Height - 150;
+            list.FlowDirection = FlowDirection.TopDown;
+            list.AutoScroll = true;
+            foreach (DriveInfo di in DriveInfo.GetDrives()) {
+                FolderButton b = new FolderButton();
+                b.Text = di.Name;
+                b.AutoSize = true;
+                b.DoubleClick += delegate {
+                    populate(di.RootDirectory);
+                };
+                list.Controls.Add(b);
+            }
+
+            Resize += delegate {
+                optionsBar.Width = Width;
+                optionsBar.runResize();
+                list.Height = Height - 150;
+            };
+
+            Controls.Add(list);
         }
+
+        protected void populate(DirectoryInfo path) {
+            //SuspendLayout();
+            list.Controls.Clear();
+            F.async(() => {
+                foreach (string info in Directory.EnumerateFileSystemEntries(path.FullName, "*", SearchOption.TopDirectoryOnly)) {
+                    Thread.Sleep(5);
+                    this.runOnUiThread(() => {
+                        FolderButton button = new FolderButton();
+                        button.AutoSize = true;
+                        button.Text = info;
+                        button.DoubleClick += delegate {
+                            if (File.Exists(info)) Process.Start(info);
+                            else populate(info);
+                        };
+                        list.Controls.Add(button);
+                    });
+                }
+                //this.runOnUiThread(() => { ResumeLayout(); });
+            });
+        }
+
+        protected void populate(string path) { populate(new DirectoryInfo(path)); }
 
         protected override void WndProc(ref Message m) {
             bool h = false;
@@ -83,7 +116,6 @@ namespace Electrum {
         }
 
         private OptionsBar optionsBar;
-        private MaterialRaisedButton openFileButton;
-
+        private FlowLayoutPanel list;
     }
 }

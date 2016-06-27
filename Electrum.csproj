@@ -88,6 +88,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controls\FolderButton.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Controls\OptionsBar.cs">
       <SubType>UserControl</SubType>
     </Compile>

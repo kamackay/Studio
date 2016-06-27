@@ -3,7 +3,7 @@ using System.Drawing.Drawing2D;
 
 namespace MaterialSkin
 {
-    static class DrawHelper
+    public static class DrawHelper
     {
         public static GraphicsPath CreateRoundRect(float x, float y, float width, float height, float radius)
         {

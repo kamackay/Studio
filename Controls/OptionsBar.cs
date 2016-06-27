@@ -19,6 +19,7 @@ namespace Electrum.Controls {
         }
 
         public void setOptions(Option[] options) {
+            Controls.Clear();
             this.options = options;
             this._(() => {
                 int x = 0, x_r = Width;
@@ -27,6 +28,10 @@ namespace Electrum.Controls {
                     button.Text = o.title;
                     button.Height = (int)(Height * .75);
                     button.Location = new Point(o.holdRight ? x_r : x, 0);
+                    if (o.holdRight)
+                        Resize += delegate {
+                            button.Left = Width - button.Width;
+                        };
                     button.textAllCaps = false;
                     button.onClick(() => { o.run(); });
                     Controls.Add(button);
@@ -37,6 +42,8 @@ namespace Electrum.Controls {
                 }
             });
         }
+
+        public void runResize() { this.OnResize(new EventArgs()); }
 
         public void setBackgroundColor(Color c) {
             BackColor = c;

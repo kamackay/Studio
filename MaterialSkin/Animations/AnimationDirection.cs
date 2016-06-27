@@ -1,7 +1,5 @@
-﻿namespace MaterialSkin.Animations
-{
-    enum AnimationDirection
-    {
+﻿namespace MaterialSkin.Animations {
+    public enum AnimationDirection {
         In, //In. Stops if finished.
         Out, //Out. Stops if finished.
         InOutIn, //Same as In, but changes to InOutOut if finished.
