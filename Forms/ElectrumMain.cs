@@ -46,6 +46,16 @@ namespace Electrum {
             Text = "Welcome to Electrum Studios";
             optionsBar = new OptionsBar();
             list = new FlowLayoutPanel();
+            loadingImage = new PictureBox();
+
+            loadingImage.Image = Properties.Resources.material_loading;
+            loadingImage.BackgroundImageLayout = ImageLayout.Zoom;
+            loadingImage.BackColor = Color.Transparent;
+            loadingImage.Size = new Size(100, 100);
+            loadingImage.Location = new Point(60, 75);
+            loadingImage.SizeMode = PictureBoxSizeMode.Zoom;
+            loadingImage.Visible = false;
+            Controls.Add(loadingImage);
 
             backButton = new BackButton();
             backButton.Size = new Size(50, 50);
@@ -54,7 +64,8 @@ namespace Electrum {
             backButton.Click += delegate {
                 F.async(() => {
                     loading = false;
-                    Thread.Sleep(10);
+                    Thread.Sleep(10); //Tell any running process to stop, then re-allow the next process
+                    loading = true;
                     list.runOnUiThread(() => { list.Controls.Clear(); });
                     this.runOnUiThread(() => { populate(Path.GetDirectoryName(currentPath)); });
                 });
@@ -77,6 +88,8 @@ namespace Electrum {
             list.Height = Height - 150;
             list.FlowDirection = FlowDirection.TopDown;
             list.AutoScroll = true;
+            list.WrapContents = false;
+            list.Margin = new Padding(10);
             populate(currentPath);
 
             Resize += delegate {
@@ -88,17 +101,28 @@ namespace Electrum {
             Controls.Add(list);
 
             Shown += delegate {
+                loadingImage.SendToBack();
                 optionsBar.Height = 30;
                 optionsBar.Width = Width;
                 optionsBar.Top = 70;
             };
         }
 
+        private PictureBox loadingImage;
+        private OptionsBar optionsBar;
+        private BackButton backButton;
+        private FlowLayoutPanel list;
+
         private bool loading = true;
         private string currentPath = string.Empty;
 
         protected void populate(DirectoryInfo path) {
-            this.runOnUiThread(() => { if (!backButton.Visible) backButton.Visible = true; });
+            this.runOnUiThread(() => {
+                if (!backButton.Visible) backButton.Visible = true;
+                loadingImage.Visible = true;
+                setAnimations(false);
+                Invalidate();
+            });
             currentPath = path.FullName;
             //SuspendLayout();
             list.Controls.Clear();
@@ -110,6 +134,7 @@ namespace Electrum {
                         this.runOnUiThread(() => {
                             FolderButton button = new FolderButton(info);
                             button.AutoSize = true;
+                            button.showAnimations = false;
                             button.DoubleClick += delegate {
                                 if (File.Exists(info)) Process.Start(info);
                                 else populate(info);
@@ -120,7 +145,10 @@ namespace Electrum {
                 } catch (Exception) {
 
                 }
-                //this.runOnUiThread(() => { ResumeLayout(); });
+                this.runOnUiThread(() => {
+                    loadingImage.Hide();
+                    setAnimations();
+                });
             });
         }
 
@@ -129,8 +157,13 @@ namespace Electrum {
             else loadDrives();
         }
 
+        private void setAnimations(bool enabled = true) {
+            foreach (Control c in list.Controls) if (c is FolderButton) ((FolderButton)c).showAnimations = enabled;
+        }
+
         private void loadDrives() {
             list.Controls.Clear();
+            this.runOnUiThread(() => { loadingImage.Visible = true; });
             foreach (DriveInfo di in DriveInfo.GetDrives()) {
                 FolderButton b = new FolderButton();
                 b.Text = string.Format("{0} ({1})", di.ToString(), di.Name);
@@ -140,6 +173,7 @@ namespace Electrum {
                 };
                 list.Controls.Add(b);
             }
+            this.runOnUiThread(() => { loadingImage.Visible = false; });
         }
 
         protected override void WndProc(ref Message m) {
@@ -152,9 +186,5 @@ namespace Electrum {
             }
             if (!h) base.WndProc(ref m);
         }
-
-        private OptionsBar optionsBar;
-        private BackButton backButton;
-        private FlowLayoutPanel list;
     }
 }

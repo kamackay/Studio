@@ -1,20 +1,54 @@
 ﻿using System;
 using System.Drawing;
 using System.IO;
+using System.Runtime.InteropServices;
 
 namespace Global {
     public class Tools {
         public static string getDataFolder() {
-            string path =  Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "KeithApps");
+            string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "KeithApps");
             try { if (!Directory.Exists(path)) Directory.CreateDirectory(path); } catch { }
             return path;
         }
 
         public static long getFolderBytes(string path) {
             long n = 0;
-            foreach (string s in Directory.GetFiles(path, "*", SearchOption.AllDirectories)) 
-                n += new FileInfo(s).Length;
+            try {
+                foreach (string s in Directory.GetFiles(path, "*", SearchOption.AllDirectories))
+                    n += new FileInfo(s).Length;
+            } catch (Exception) { return -1; }
             return n;
+        }
+
+        /// <summary>
+        /// Get the string associated with this increment in 
+        /// </summary>
+        /// <param name="num"></param>
+        /// <returns></returns>
+        public static string getUnitString(short num) {
+            switch (num) {
+                default:
+                case 0: return "B";
+                case 1: return "KB";
+                case 2: return "MB";
+                case 3: return "GB";
+                case 4: return "TB";
+                case 5: return "PB";
+            }
+        }
+
+        /// <summary>
+        /// Wraps necessary functions imported from User32.dll. Code courtesy of MSDN Cold Rooster Consulting example.
+        /// </summary>
+        public class User32 {
+            /// <summary>
+            /// Provides access to function required to delete handle. This method is used internally
+            /// and is not required to be called separately.
+            /// </summary>
+            /// <param name="hIcon">Pointer to icon handle.</param>
+            /// <returns>N/A</returns>
+            [DllImport("User32.dll")]
+            public static extern int DestroyIcon(IntPtr hIcon);
         }
 
         public static Font getFont(float size) {

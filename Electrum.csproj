@@ -75,6 +75,7 @@
     <ApplicationIcon>Resources\electrum.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="PresentationCore" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -86,6 +87,7 @@
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controls\BackButton.cs">
@@ -94,9 +96,12 @@
     <Compile Include="Controls\FolderButton.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Controls\Margin.cs" />
     <Compile Include="Controls\OptionsBar.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="External\IconHelper.cs" />
+    <Compile Include="External\IconListManager.cs" />
     <Compile Include="Forms\AutoClosingMessageBox.cs" />
     <Compile Include="Forms\ElectrumMain.cs">
       <SubType>Form</SubType>
@@ -229,6 +234,8 @@
     <Content Include="electrum.ico" />
     <Content Include="FodyWeavers.xml" />
     <Content Include="Resources\back_sm.png" />
+    <None Include="Resources\circle_white.png" />
+    <None Include="Resources\imageres_4.ico" />
     <None Include="Resources\electrum.png" />
     <None Include="Resources\electrum.ico" />
   </ItemGroup>
@@ -244,6 +251,7 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="packages\cef.redist.x64.3.2623.1401\build\cef.redist.x64.targets" Condition="Exists('packages\cef.redist.x64.3.2623.1401\build\cef.redist.x64.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
