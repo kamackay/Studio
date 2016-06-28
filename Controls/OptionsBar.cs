@@ -10,12 +10,14 @@ namespace Electrum.Controls {
         private Option[] options;
 
         public OptionsBar() {
-            this._(() => {
+            Action todo = () => {
                 Form f = FindForm();
-                Width = f.Width;
                 Height = 30;
+                Width = f.Width;
                 Top = 70;
-            });
+            };
+            //todo.Invoke();
+            this._(todo);
         }
 
         public void setOptions(Option[] options) {
@@ -28,10 +30,10 @@ namespace Electrum.Controls {
                     button.Text = o.title;
                     button.Height = (int)(Height * .75);
                     button.Location = new Point(o.holdRight ? x_r : x, 0);
-                    if (o.holdRight)
+                    /*if (o.holdRight)
                         Resize += delegate {
                             button.Left = Width - button.Width;
-                        };
+                        };/**/
                     button.textAllCaps = false;
                     button.onClick(() => { o.run(); });
                     Controls.Add(button);
@@ -42,8 +44,6 @@ namespace Electrum.Controls {
                 }
             });
         }
-
-        public void runResize() { this.OnResize(new EventArgs()); }
 
         public void setBackgroundColor(Color c) {
             BackColor = c;

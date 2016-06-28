@@ -105,7 +105,9 @@ namespace Electrum {
                         if (File.Exists(arguments[0].Trim())) openFile(arguments[0].Trim());
                         else MessageBox.Show(string.Format("Not sure what to do with '{0}' - It is not a file.", arguments[0]));
                     } else openHomeScreen();
-                } catch (Exception e) { MessageBox.Show("Error: " + e.Message); }
+                } catch (Exception e) {
+                    MessageBox.Show("Error: " + e.Message);
+                }
             }
         }
 

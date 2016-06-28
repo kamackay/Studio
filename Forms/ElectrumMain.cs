@@ -73,8 +73,7 @@ namespace Electrum {
             }
 
             Resize += delegate {
-                optionsBar.Width = Width;
-                optionsBar.runResize();
+                //optionsBar.Width = Width;
                 list.Height = Height - 150;
             };
 
