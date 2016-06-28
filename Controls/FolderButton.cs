@@ -6,6 +6,8 @@ using System.Drawing;
 using System.Windows.Forms;
 using System.Drawing.Drawing2D;
 using System.Drawing.Text;
+using System.IO;
+using Global;
 
 namespace Electrum.Controls {
     public class FolderButton : Label, IMaterialControl {
@@ -23,7 +25,7 @@ namespace Electrum.Controls {
         private Brush fontBrush = null, backgroundBrush = null;
 
 
-        public FolderButton() {
+        public FolderButton(string path = null) {
             Primary = true;
             MinimumSize = new Size(500, 10);
             
@@ -38,6 +40,20 @@ namespace Electrum.Controls {
                 AnimationType = AnimationType.EaseOut
             };
             animationManager.OnAnimationProgress += sender => Invalidate();
+
+            if (path != null) getInfo(path);
+        }
+
+        private void getInfo(string path) {
+            Text = path;
+
+            F.async(() => {
+                long bytes = 0;
+                string unit = "Bytes";
+                if (File.Exists(path)) bytes = new FileInfo(path).Length;
+                else bytes = Tools.getFolderBytes(path);
+                this.runOnUiThread(() => { Text = string.Format("{0}   {1:n}{3}", path, bytes, unit); });
+            });
         }
 
         protected override void OnMouseUp(MouseEventArgs mevent) {

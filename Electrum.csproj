@@ -88,6 +88,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controls\BackButton.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Controls\FolderButton.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -225,6 +228,7 @@
   <ItemGroup>
     <Content Include="electrum.ico" />
     <Content Include="FodyWeavers.xml" />
+    <Content Include="Resources\back_sm.png" />
     <None Include="Resources\electrum.png" />
     <None Include="Resources\electrum.ico" />
   </ItemGroup>

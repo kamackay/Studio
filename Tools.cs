@@ -10,6 +10,13 @@ namespace Global {
             return path;
         }
 
+        public static long getFolderBytes(string path) {
+            long n = 0;
+            foreach (string s in Directory.GetFiles(path, "*", SearchOption.AllDirectories)) 
+                n += new FileInfo(s).Length;
+            return n;
+        }
+
         public static Font getFont(float size) {
             string fontName = "Product Sans";
             using (Font fontTester = new Font(

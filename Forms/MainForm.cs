@@ -552,11 +552,11 @@ namespace Electrum {
         /// <param name="control">UI Element to tie runnable to</param>
         /// <param name="runnable">Actions to perform while still allowing animations and UI Elements</param>
         /// <returns>The Thread that the runnable will be run on</returns>
-        public static Thread _(this Control control, Action runnable) {
+        public static Thread _(this Control control, Action runnable, int timeout = 100) {
             try {
                 Thread t = new Thread(new ThreadStart(() => {
                     try {
-                        Thread.Sleep(100);
+                        Thread.Sleep(timeout);
                         control.Invoke(runnable);
                     } catch { }
                 }));

@@ -1,6 +1,6 @@
-﻿using MaterialSkin.Controls;
+﻿using Global;
+using MaterialSkin.Controls;
 using System;
-using Global;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -10,14 +10,11 @@ namespace Electrum.Controls {
         private Option[] options;
 
         public OptionsBar() {
-            Action todo = () => {
-                Form f = FindForm();
-                Height = 30;
-                Width = f.Width;
-                Top = 70;
+            Resize += delegate {
+                /*try {
+                    Width = FindForm().Width;
+                } catch { }/**/
             };
-            //todo.Invoke();
-            this._(todo);
         }
 
         public void setOptions(Option[] options) {
@@ -30,7 +27,7 @@ namespace Electrum.Controls {
                     button.Text = o.title;
                     button.Height = (int)(Height * .75);
                     button.Location = new Point(o.holdRight ? x_r : x, 0);
-                    /*if (o.holdRight)
+                    if (o.holdRight)
                         Resize += delegate {
                             button.Left = Width - button.Width;
                         };/**/
@@ -42,8 +39,10 @@ namespace Electrum.Controls {
                         button.Location = new Point(x_r, 0);
                     } else x += button.Width;
                 }
-            });
+            }, 1000);
         }
+
+        public void runResize() { this.OnResize(new EventArgs()); }
 
         public void setBackgroundColor(Color c) {
             BackColor = c;
