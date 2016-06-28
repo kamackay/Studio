@@ -34,6 +34,7 @@ namespace Electrum {
         }
 
         const int t = 100;
+        const string defaultText = "Welcome to Electrum Studios";
 
         /// <summary>
         /// Required method for Designer support - do not modify
@@ -43,7 +44,7 @@ namespace Electrum {
             components = new System.ComponentModel.Container();
             AutoScaleMode = AutoScaleMode.Font;
             KeyPreview = true;
-            Text = "Welcome to Electrum Studios";
+            Text = defaultText;
             optionsBar = new OptionsBar();
             list = new FlowLayoutPanel();
             loadingImage = new PictureBox();
@@ -51,8 +52,8 @@ namespace Electrum {
             loadingImage.Image = Properties.Resources.material_loading;
             loadingImage.BackgroundImageLayout = ImageLayout.Zoom;
             loadingImage.BackColor = Color.Transparent;
-            loadingImage.Size = new Size(100, 100);
-            loadingImage.Location = new Point(60, 75);
+            loadingImage.Size = new Size(50, 40);
+            loadingImage.Location = new Point(60, 110);
             loadingImage.SizeMode = PictureBoxSizeMode.Zoom;
             loadingImage.Visible = false;
             Controls.Add(loadingImage);
@@ -88,7 +89,7 @@ namespace Electrum {
             list.Height = Height - 150;
             list.FlowDirection = FlowDirection.TopDown;
             list.AutoScroll = true;
-            list.WrapContents = false;
+            //list.WrapContents = false;
             list.Margin = new Padding(10);
             populate(currentPath);
 
@@ -118,6 +119,7 @@ namespace Electrum {
 
         protected void populate(DirectoryInfo path) {
             this.runOnUiThread(() => {
+                Text = path.FullName;
                 if (!backButton.Visible) backButton.Visible = true;
                 loadingImage.Visible = true;
                 setAnimations(false);
@@ -162,6 +164,7 @@ namespace Electrum {
         }
 
         private void loadDrives() {
+            this.runOnUiThread(() => { Text = defaultText; });
             list.Controls.Clear();
             this.runOnUiThread(() => { loadingImage.Visible = true; });
             foreach (DriveInfo di in DriveInfo.GetDrives()) {

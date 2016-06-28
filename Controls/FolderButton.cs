@@ -64,7 +64,7 @@ namespace Electrum.Controls {
                     bytes /= 1024;
                     unit++;
                 }
-                setText(string.Format("{0}   {1:#,0.0##} {2}", path, bytes, Tools.getUnitString(unit)));
+                setText(string.Format("{0}   {1:#,0.0##} {2}", Path.GetFileName(path), bytes, Tools.getUnitString(unit)));
             });
             F.async(() => {
                 if (Directory.Exists(path)) {
@@ -76,10 +76,10 @@ namespace Electrum.Controls {
         }
 
         private void setText(string newText) {
-            int w = TextRenderer.MeasureText(newText, Font).Width + 100;
+            int w = TextRenderer.MeasureText(newText, Font).Width + 150 + (img != null ? img.Width : 0);
             this.runOnUiThread(() => {
                 Text = newText;
-                Width = w;
+                if (w > Width) Width = w;
                 Invalidate();
             });
         }
