@@ -10,6 +10,7 @@ using System.IO;
 using Global;
 using System.Threading;
 using Etier.IconHelper;
+using System.Diagnostics;
 
 namespace Electrum.Controls {
     public class FolderButton : Label, IMaterialControl {
@@ -65,6 +66,7 @@ namespace Electrum.Controls {
                 Thread.Sleep(new Random().Next(1000));
                 double bytes = 0;
                 short unit = 0;
+                DateTime date = new FileInfo(path).LastWriteTimeUtc;
                 if (File.Exists(path)) bytes = new FileInfo(path).Length;
                 else bytes = Tools.getFolderBytes(path);
                 if (bytes == -1) return;
@@ -72,7 +74,7 @@ namespace Electrum.Controls {
                     bytes /= 1024;
                     unit++;
                 }
-                setText(string.Format("{0}   {1:#,0.0##} {2}", Path.GetFileName(path), bytes, Tools.getUnitString(unit)));
+                setText(string.Format("{0}  \t {1:#,0.0##} {2}  \t {3}", Path.GetFileName(path), bytes, Tools.getUnitString(unit), date.ToString("yyyy-MM-dd HH:mm:ss")));
             });
             F.async(() => {
                 if (Directory.Exists(path)) {
@@ -140,5 +142,25 @@ namespace Electrum.Controls {
         }
 
         public string getPathName() { return filename; }
+
+        protected override void OnMouseClick(MouseEventArgs args) {
+            base.OnMouseClick(args);
+            if (args.Button == MouseButtons.Right) {
+                ContextMenu c = new ContextMenu(new MenuItem[] {
+                    new MenuItem("Open", delegate (object o2, EventArgs args2) {
+                       if (File.Exists(filename)) Process.Start(filename);
+                       else ((ElectrumMain)FindForm()).populate(filename);
+                       selected = false;
+                }), new MenuItem("Delete", delegate (object o2, EventArgs args2) {
+
+                }) });
+                c.Show(this, args.Location);
+            }
+        }
+
+        protected override void OnLeave(EventArgs e) {
+            base.OnLeave(e);
+            setSelected(false);
+        }
     }
 }

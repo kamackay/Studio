@@ -86,7 +86,9 @@ namespace Electrum {
             list.Height = Height - 150;
             list.FlowDirection = FlowDirection.TopDown;
             list.AutoScroll = true;
-            //list.WrapContents = false;
+            list.MouseClick += delegate (object o, MouseEventArgs args) {
+                if (args.Button == MouseButtons.Left) noneSelected();
+            };
             list.Margin = new Padding(10);
             populate(currentPath);
 
@@ -106,12 +108,13 @@ namespace Electrum {
                 optionsBar.Top = 70;
             };
 
-            MouseEventHandler fClick = delegate (object o, MouseEventArgs args) {
+            MouseClick += delegate (object o, MouseEventArgs args) {
+                if (args.Button == MouseButtons.XButton1) goBack();
+                if (args.Button == MouseButtons.Left) noneSelected();
+            };
+            formClick += delegate (object o, MouseEventArgs args) {
                 if (args.Button == MouseButtons.XButton1) goBack();
             };
-
-            MouseClick += fClick;
-            formClick += fClick;
             this._(() => { setButtonsWidth(); });
         }
 
@@ -149,13 +152,6 @@ namespace Electrum {
                             if ((ModifierKeys & Keys.Control) != Keys.Control)
                                 foreach (Control c in list.Controls) if (c is FolderButton) ((FolderButton)c).setSelected(false);
                             if (o is FolderButton) ((FolderButton)o).setSelected();
-                            if (args.Button == MouseButtons.Right) {
-                                ContextMenu c = new ContextMenu();
-                                c.MenuItems.Add(new MenuItem("Delete", delegate (object o2, EventArgs args2) {
-
-                                }));
-                                c.Show((Control)o, args.Location);
-                            }
                         } catch (Exception e) {
 
                         }
@@ -199,7 +195,7 @@ namespace Electrum {
             });
         }
 
-        protected void populate(string path) {
+        public void populate(string path) {
             if (path != null && !path.Equals(string.Empty)) populate(new DirectoryInfo(path));
             else loadDrives();
         }
@@ -222,6 +218,10 @@ namespace Electrum {
                 list.Controls.Add(b);
             }
             this.runOnUiThread(() => { loadingImage.Visible = false; });
+        }
+
+        private void noneSelected() {
+            foreach (Control c in list.Controls) if (c is FolderButton) ((FolderButton)c).setSelected(false);
         }
 
         private void goBack() {
