@@ -23,6 +23,8 @@ namespace Electrum {
             openForm(args);
         }
 
+        internal NotifyIcon trayIcon;
+
         private void init(string[] args) {
             openForms = new List<Form>();
             settings = Settings.getDefault();
@@ -30,7 +32,7 @@ namespace Electrum {
                 while (runBackground) {
                     Thread.Sleep(5000);
                     try {
-                        if (openForms.Count == 0 || Application.OpenForms.Count == 0) Application.Exit();
+                        if (openForms.Count == 0 /*|| Application.OpenForms.Count == 0/**/) quit();
                     } catch (Exception e) {
                         MessageBox.Show(e.Message);
                     }
@@ -52,6 +54,15 @@ namespace Electrum {
                     } catch { }
                 }
             });
+            trayIcon = new NotifyIcon();
+            trayIcon.Text = "Electrum Studios";
+            trayIcon.Icon = Properties.Resources.electrum;
+            trayIcon.Visible = true;
+            trayIcon.MouseClick += delegate (object o, MouseEventArgs a) {
+                if (a.Button == MouseButtons.Right) {
+                    //Show some sort of settings screen
+                } else if (a.Button == MouseButtons.Left) openForm(new ElectrumMain());
+            };
         }
 
         bool runBackground = true;
@@ -71,7 +82,7 @@ namespace Electrum {
                     if (FileTypes.isImage(arguments[0].Trim())) settings.picture = true;
                 } else {
                     MessageBox.Show("Unexpected Parameter: " + arguments[0].Trim(), "Electrum");
-                    Environment.Exit(1);
+                    quit();
                 }
             }
             if (settings.picture) {
@@ -130,6 +141,7 @@ namespace Electrum {
             args = args.trimAll();
             if (args.Length == 1) {
                 if (File.Exists(args[0])) openFile(args[0]);
+                //MessageBox.Show("Recieved Message from another Process!");
             }
         }
 
@@ -142,13 +154,14 @@ namespace Electrum {
         public void formClosed(Form f = null) {
             try {
                 if (f != null) openForms.Remove(f);
-                if (openForms.Count == 0) Environment.Exit(0);
+                if (openForms.Count == 0) quit();
             } catch { }
         }
 
         void openForm(Form f) {
             f.FormClosing += delegate {
                 openForms.Remove(f);
+                if (openForms.Count == 0) quit();
             };
             if (f is KeithForm)
                 ((KeithForm)f).subFormOpened += delegate (object o, KeithForm.FormOpenEventArgs arg) {
@@ -163,6 +176,12 @@ namespace Electrum {
             //    };
             openForms.Add(f);
             f.Show();
+        }
+
+        public void quit() {
+            if (trayIcon != null) trayIcon.Visible = false;
+            Application.Exit();
+            Environment.Exit(0);//In Case the last one didn't work
         }
 
         public void openFile(string filename, Form f = null) {

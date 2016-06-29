@@ -11,7 +11,7 @@ using System.Windows.Forms;
 
 namespace Electrum {
     public abstract partial class KeithForm : MaterialForm {
-        public KeithForm() {
+        public KeithForm() : base() {
             InitializeComponent();
             materialSkinManager = MaterialSkinManager.Instance;
             materialSkinManager.AddFormToManage(this);
@@ -102,6 +102,8 @@ namespace Electrum {
                     }
                 });
             };
+            Font f = new Font("Roboto", 8f, FontStyle.Regular);
+            Font = f;
             init();
         }
 

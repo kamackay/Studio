@@ -10,7 +10,7 @@ using System.Windows.Forms;
 
 namespace Electrum {
     public partial class ElectrumMain : KeithForm {
-        public ElectrumMain() {
+        public ElectrumMain() : base() {
             InitializeComponent();
             initialActions = () => {
                 this.sync(() => {
@@ -49,19 +49,32 @@ namespace Electrum {
             optionsBar = new OptionsBar();
             list = new FlowLayoutPanel();
             loadingImage = new PictureBox();
+            pathBar = new TextBox();
+
+            pathBar.Font = new Font(Font.FontFamily, 20f);
+            pathBar.Text = "";
+            pathBar.ReadOnly = true;
+            pathBar.Padding = new Padding(5);
+            pathBar.BackColor = Color.FromArgb(0x25, 0x24, 0x23);
+            pathBar.ForeColor = Color.Yellow;
+            pathBar.AutoSize = false;
+            pathBar.Size = new Size(Width, pathBar.Font.Height);
+            pathBar.Location = new Point(0, 100);
+            pathBar.BorderStyle = BorderStyle.None;
+            add(pathBar);
 
             loadingImage.Image = Properties.Resources.material_loading;
             loadingImage.BackgroundImageLayout = ImageLayout.Zoom;
             loadingImage.BackColor = Color.Transparent;
             loadingImage.Size = new Size(50, 40);
-            loadingImage.Location = new Point(60, 110);
+            loadingImage.Location = new Point(60, 120 + pathBar.Height);
             loadingImage.SizeMode = PictureBoxSizeMode.Zoom;
             loadingImage.Visible = false;
             add(loadingImage);
 
             backButton = new BackButton();
             backButton.Size = new Size(50, 50);
-            backButton.Location = new Point(0, 100);
+            backButton.Location = new Point(0, 110 + pathBar.Height);
             backButton.Visible = false;
             backButton.MouseClick += delegate (object o, MouseEventArgs args) {
                 if (args.Button == MouseButtons.Left) {
@@ -83,7 +96,7 @@ namespace Electrum {
             add(optionsBar);
 
             list.Dock = DockStyle.Bottom;
-            list.Height = Height - 150;
+            list.Height = Height - backButton.Bottom;
             list.FlowDirection = FlowDirection.TopDown;
             list.AutoScroll = true;
             list.MouseClick += delegate (object o, MouseEventArgs args) {
@@ -95,8 +108,9 @@ namespace Electrum {
             Resize += delegate {
                 optionsBar.Width = Width;
                 optionsBar.runResize();
-                list.Height = Height - 150;
+                list.Height = Height - backButton.Bottom;
                 setButtonsWidth();
+                pathBar.Width = Width;
             };
 
             add(list);
@@ -123,8 +137,10 @@ namespace Electrum {
                 if (c is FolderButton) c.MinimumSize = new Size(Math.Max(500, (Width - 50) / 2), c.MinimumSize.Height);
         }
 
+        private int mostRecent = -1;
         private PictureBox loadingImage;
         private OptionsBar optionsBar;
+        private TextBox pathBar;
         private BackButton backButton;
         private FlowLayoutPanel list;
 
@@ -137,6 +153,7 @@ namespace Electrum {
             loading = true;
             this.runOnUiThread(() => {
                 Text = path.FullName;
+                pathBar.Text = Text;
                 if (!backButton.Visible) backButton.Visible = true;
                 loadingImage.Visible = true;
                 setAnimations(false);
@@ -149,9 +166,23 @@ namespace Electrum {
                 try {
                     MouseEventHandler click = delegate (object o, MouseEventArgs args) {
                         try {
-                            if ((ModifierKeys & Keys.Control) != Keys.Control)
+                            if ((ModifierKeys & Keys.Control) != Keys.Control && (ModifierKeys & Keys.Shift) != Keys.Shift)
                                 foreach (Control c in list.Controls) if (c is FolderButton) ((FolderButton)c).setSelected(false);
-                            if (o is FolderButton) ((FolderButton)o).setSelected();
+                            if ((ModifierKeys & Keys.Shift) == Keys.Shift) {
+                                if (mostRecent == -1) goto selectSingle;
+                                int curr = list.Controls.IndexOf((Control)o);
+                                if (curr > mostRecent) for (int i = mostRecent; i <= curr; i++)
+                                        ((FolderButton)list.Controls[i]).setSelected();
+                                else for (int i = mostRecent; i >= curr; i--)
+                                        ((FolderButton)list.Controls[i]).setSelected();
+                            } else if (o is FolderButton) {
+                                goto selectSingle;
+                            }
+                            return;
+
+                            selectSingle:
+                            ((FolderButton)o).setSelected();
+                            mostRecent = list.Controls.IndexOf((Control)o);
                         } catch (Exception e) {
 
                         }

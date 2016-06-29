@@ -152,7 +152,9 @@ namespace Electrum.Controls {
                        else ((ElectrumMain)FindForm()).populate(filename);
                        selected = false;
                 }), new MenuItem("Delete", delegate (object o2, EventArgs args2) {
+                    try {
 
+                    }catch(Exception e) { }
                 }) });
                 c.Show(this, args.Location);
             }

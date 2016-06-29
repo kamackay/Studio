@@ -215,6 +215,7 @@
     <None Include="Resources\loading.gif" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\Roboto-Regular.ttf" />
     <None Include="Resources\Studio.png" />
   </ItemGroup>
   <ItemGroup>

@@ -14,9 +14,12 @@ namespace Global {
         public static long getFolderBytes(string path) {
             long n = 0;
             try {
-                foreach (string s in Directory.GetFiles(path, "*", SearchOption.AllDirectories))
-                    n += new FileInfo(s).Length;
-            } catch (Exception) { return -1; }
+                foreach (string s in Directory.GetFiles(path, "*", SearchOption.AllDirectories)) {
+                    try {
+                        n += new FileInfo(s).Length;
+                    } catch { }
+                }
+            } catch (Exception e) { return n; }
             return n;
         }
 

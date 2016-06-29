@@ -11,3 +11,4 @@ C:\Keith\Studio\MaterialSkin\obj\Debug\MaterialSkin.Properties.Resources.resourc
 C:\Keith\Studio\MaterialSkin\obj\Debug\MaterialSkin.csproj.GenerateResource.Cache
 C:\Keith\Studio\MaterialSkin\obj\Debug\MaterialSkin.dll
 C:\Keith\Studio\MaterialSkin\obj\Debug\MaterialSkin.pdb
+C:\Keith\Studio\MaterialSkin\obj\Debug\MaterialSkin.csprojResolveAssemblyReference.cache
