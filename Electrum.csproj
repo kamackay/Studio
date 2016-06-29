@@ -93,6 +93,9 @@
     <Compile Include="Controls\BackButton.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="Controls\ElectrumControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Controls\FolderButton.cs">
       <SubType>Component</SubType>
     </Compile>

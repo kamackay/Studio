@@ -7,9 +7,9 @@ using System.Drawing.Text;
 using System.Drawing.Drawing2D;
 
 namespace Electrum.Controls {
-    public class BackButton : UserControl, IMaterialControl {
+    public class BackButton : ElectrumControl, IMaterialControl {
 
-        public BackButton() {
+        public BackButton() : base() {
             Size = new Size(50, 50);
             Primary = true;
 

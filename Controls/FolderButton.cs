@@ -22,18 +22,26 @@ namespace Electrum.Controls {
         private readonly AnimationManager animationManager;
         public bool Primary { get; set; }
         public bool textAllCaps = false;
+        private string filename;
+        private bool selected;
 
-        private bool customFontColor = false, customButtonColor = false;
+        private bool customFontColor = false;
         public bool showAnimations { get; set; } = true;
         private Brush fontBrush = null, backgroundBrush = null;
+
+        public Color selectedColor;
 
         private Icon img = null;
 
         public FolderButton(string path = null) {
             Primary = true;
             MinimumSize = new Size(500, 10);
-
+            filename = path;
             Text = path;
+
+            setSelected(false);
+
+            selectedColor = Color.FromArgb(0xFFEE58);
 
             Padding = new Padding(15);
             Margin = new Padding(5);
@@ -99,13 +107,13 @@ namespace Electrum.Controls {
                 ClientRectangle.Y,
                 ClientRectangle.Width - 1,
                 ClientRectangle.Height - 1, 1f))
-                g.FillPath(customButtonColor ? backgroundBrush : (Primary ? SkinManager.ColorScheme.PrimaryBrush : SkinManager.GetRaisedButtonBackgroundBrush()), backgroundPath);
+                g.FillPath(backgroundBrush != null ? backgroundBrush : (Primary ? SkinManager.ColorScheme.PrimaryBrush : SkinManager.GetRaisedButtonBackgroundBrush()), backgroundPath);
 
             if (showAnimations && animationManager.IsAnimating()) {
                 for (int i = 0; i < animationManager.GetAnimationCount(); i++) {
                     var animationValue = animationManager.GetProgress(i);
                     var animationSource = animationManager.GetSource(i);
-                    var rippleBrush = new SolidBrush(Color.FromArgb((int)(51 - (animationValue * 50)), Color.Black));
+                    var rippleBrush = new SolidBrush(Color.FromArgb((int)(51 - (animationValue * 50)), selected ? Color.Black : selectedColor));
                     var rippleSize = (int)(animationValue * Width * 2);
                     g.FillEllipse(rippleBrush, new Rectangle(animationSource.X - rippleSize / 2, animationSource.Y - rippleSize / 2, rippleSize, rippleSize));
                 }
@@ -118,5 +126,19 @@ namespace Electrum.Controls {
                 g.DrawIcon(img, 5, y);
             }
         }
+
+
+        public bool isSelected() { return selected; }
+        /// <summary>
+        /// Set whether or not the control is selected
+        /// </summary>
+        /// <param name="state">True if the control is selected</param>
+        public void setSelected(bool state = true) {
+            selected = state;
+            backgroundBrush = state ? new SolidBrush(Color.FromArgb(255, selectedColor)) : new SolidBrush(Color.FromArgb(0x7F999999));
+            Invalidate();
+        }
+
+        public string getPathName() { return filename; }
     }
 }

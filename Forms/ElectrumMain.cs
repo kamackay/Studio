@@ -1,6 +1,7 @@
 ﻿using Electrum.Controls;
 using Global;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
@@ -56,23 +57,19 @@ namespace Electrum {
             loadingImage.Location = new Point(60, 110);
             loadingImage.SizeMode = PictureBoxSizeMode.Zoom;
             loadingImage.Visible = false;
-            Controls.Add(loadingImage);
+            add(loadingImage);
 
             backButton = new BackButton();
             backButton.Size = new Size(50, 50);
             backButton.Location = new Point(0, 100);
             backButton.Visible = false;
-            backButton.Click += delegate {
-                F.async(() => {
-                    loading = false;
-                    Thread.Sleep(10); //Tell any running process to stop, then re-allow the next process
-                    loading = true;
-                    list.runOnUiThread(() => { list.Controls.Clear(); });
-                    this.runOnUiThread(() => { populate(Path.GetDirectoryName(currentPath)); });
-                });
+            backButton.MouseClick += delegate (object o, MouseEventArgs args) {
+                if (args.Button == MouseButtons.Left) {
+                    goBack();
+                }
             };
 
-            Controls.Add(backButton);
+            add(backButton);
 
             optionsBar.setOptions(new OptionsBar.Option[] {
                 new OptionsBar.Option { title = "Open File", onClick = () => { this.f(); } },
@@ -83,7 +80,7 @@ namespace Electrum {
                     onClick = () => { } }/**/
             });
             optionsBar.setBackgroundColor(Color.FromArgb(0x50, 0x50, 0x50));
-            Controls.Add(optionsBar);
+            add(optionsBar);
 
             list.Dock = DockStyle.Bottom;
             list.Height = Height - 150;
@@ -97,9 +94,10 @@ namespace Electrum {
                 optionsBar.Width = Width;
                 optionsBar.runResize();
                 list.Height = Height - 150;
+                setButtonsWidth();
             };
 
-            Controls.Add(list);
+            add(list);
 
             Shown += delegate {
                 loadingImage.SendToBack();
@@ -107,6 +105,19 @@ namespace Electrum {
                 optionsBar.Width = Width;
                 optionsBar.Top = 70;
             };
+
+            MouseEventHandler fClick = delegate (object o, MouseEventArgs args) {
+                if (args.Button == MouseButtons.XButton1) goBack();
+            };
+
+            MouseClick += fClick;
+            formClick += fClick;
+            this._(() => { setButtonsWidth(); });
+        }
+
+        private void setButtonsWidth() {
+            foreach (Control c in list.Controls)
+                if (c is FolderButton) c.MinimumSize = new Size(Math.Max(500, (Width - 50) / 2), c.MinimumSize.Height);
         }
 
         private PictureBox loadingImage;
@@ -114,10 +125,13 @@ namespace Electrum {
         private BackButton backButton;
         private FlowLayoutPanel list;
 
-        private bool loading = true;
+        private static bool loading = true;
         private string currentPath = string.Empty;
 
         protected void populate(DirectoryInfo path) {
+            loading = false;
+            Thread.Sleep(10);
+            loading = true;
             this.runOnUiThread(() => {
                 Text = path.FullName;
                 if (!backButton.Visible) backButton.Visible = true;
@@ -130,18 +144,49 @@ namespace Electrum {
             list.Controls.Clear();
             F.async(() => {
                 try {
-                    foreach (string info in Directory.EnumerateFileSystemEntries(path.FullName, "*", SearchOption.TopDirectoryOnly)) {
+                    MouseEventHandler click = delegate (object o, MouseEventArgs args) {
+                        try {
+                            if ((ModifierKeys & Keys.Control) != Keys.Control)
+                                foreach (Control c in list.Controls) if (c is FolderButton) ((FolderButton)c).setSelected(false);
+                            if (o is FolderButton) ((FolderButton)o).setSelected();
+                            if (args.Button == MouseButtons.Right) {
+                                ContextMenu c = new ContextMenu();
+                                c.MenuItems.Add(new MenuItem("Delete", delegate (object o2, EventArgs args2) {
+
+                                }));
+                                c.Show((Control)o, args.Location);
+                            }
+                        } catch (Exception e) {
+
+                        }
+                    };
+                    IEnumerable<string> items = Directory.EnumerateFileSystemEntries(path.FullName, "*", SearchOption.TopDirectoryOnly);
+                    byte x = 0;
+                    foreach (string info in items) {
+                        if (x++ >= 5) {
+                            this.runOnUiThread(() => {
+                                list.PerformLayout();
+                            });
+                            x = 0;
+                        }
                         if (!loading) break;
                         Thread.Sleep(5);
                         this.runOnUiThread(() => {
                             FolderButton button = new FolderButton(info);
                             button.AutoSize = true;
                             button.showAnimations = false;
-                            button.DoubleClick += delegate {
-                                if (File.Exists(info)) Process.Start(info);
-                                else populate(info);
+                            button.MinimumSize = new Size(Math.Max(500, (Width - 50) / 2), button.MinimumSize.Height);
+                            button.MouseClick += click;
+                            button.MouseDoubleClick += delegate (object o, MouseEventArgs args) {
+                                if (args.Button == MouseButtons.Left) {
+                                    if (File.Exists(info)) {
+                                        this._(() => { ((FolderButton)o).setSelected(false); });
+                                        Process.Start(info);
+                                    } else populate(info);
+                                }
                             };
                             list.Controls.Add(button);
+                            add(button, false);
                         });
                     }
                 } catch (Exception) {
@@ -177,6 +222,19 @@ namespace Electrum {
                 list.Controls.Add(b);
             }
             this.runOnUiThread(() => { loadingImage.Visible = false; });
+        }
+
+        private void goBack() {
+            F.async(() => {
+                loading = false;
+                Thread.Sleep(10); //Tell any running process to stop, then re-allow the next process
+                loading = true;
+                list.runOnUiThread(() => { list.Controls.Clear(); });
+                this.runOnUiThread(() => {
+                    if (!string.IsNullOrEmpty(currentPath))
+                        populate(Path.GetDirectoryName(currentPath));
+                });
+            });
         }
 
         protected override void WndProc(ref Message m) {

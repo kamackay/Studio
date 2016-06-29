@@ -43,6 +43,22 @@ namespace Electrum {
             public Form subForm { get; set; }
         }
 
+        public event MouseEventHandler formClick;
+
+        protected void onFormClick(MouseEventArgs args) {
+            formClick?.Invoke(this, args);
+        }
+
+        /// <summary>
+        /// Add Control to the form, adding a click listener that is sent to the form
+        /// </summary>
+        /// <param name="c"></param>
+        protected void add(Control c, bool addToForm = true) {
+            c.MouseClick += delegate (object o, MouseEventArgs args) {
+                onFormClick(args);
+            };
+            if (addToForm) Controls.Add(c);
+        }
 
         /// <summary>
         /// Required designer variable.
@@ -81,7 +97,7 @@ namespace Electrum {
             MinimumSize = new Size(50, 100);
             KeyDown += delegate (object o, KeyEventArgs args) {
                 F.async(() => {
-                if (args.Control) {
+                    if (args.Control) {
                         if (args.KeyCode == Keys.O) this.f();
                     }
                 });
