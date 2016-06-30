@@ -49,6 +49,22 @@ namespace Electrum {
             formClick?.Invoke(this, args);
         }
 
+        protected void animateWidth(int newVal, int duration = 1000) {
+            this.sync(() => { Width = newVal; });
+            /*F.async(() => {
+                int w = 0;
+                this.sync(() => { w = Width; }) ;
+                Thread.Sleep(10);
+                int diff = Math.Abs(newVal - w);
+                int time = duration / diff;
+                for (int i = 0; i < diff; i++) {
+                    Thread.Sleep(time);
+                    if (w > newVal) this.runOnUiThread(() => { Width++; Invalidate(); });
+                    else this.runOnUiThread(() => { Width--; });
+                }
+            });/**/
+        }
+
         /// <summary>
         /// Add Control to the form, adding a click listener that is sent to the form
         /// </summary>

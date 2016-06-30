@@ -22,5 +22,17 @@ namespace Electrum.Properties {
                 return defaultInstance;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("c:\\")]
+        public string MusicFilePath {
+            get {
+                return ((string)(this["MusicFilePath"]));
+            }
+            set {
+                this["MusicFilePath"] = value;
+            }
+        }
     }
 }

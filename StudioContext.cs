@@ -197,6 +197,9 @@ namespace Electrum {
                     case ".gif":
                         openForm(new GifViewer(filename));
                         return;
+                    case ".mp3":
+                        openForm(new MP3Form(filename));
+                        return;
                 }
 
                 // Handle all filetypes here

@@ -2,11 +2,12 @@
 using System.Drawing;
 using System.IO;
 using System.Runtime.InteropServices;
+using System.Windows.Forms;
 
 namespace Global {
     public class Tools {
         public static string getDataFolder() {
-            string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "KeithApps");
+            string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), Application.ProductName);
             try { if (!Directory.Exists(path)) Directory.CreateDirectory(path); } catch { }
             return path;
         }
