@@ -126,6 +126,7 @@ namespace Electrum {
             ElectrumMain f = new ElectrumMain();
             f.FormClosing += delegate {
                 openForms.Remove(f);
+                if (openForms.Count == 0) quit();
             };
             f.subFormOpened += delegate (object o, KeithForm.FormOpenEventArgs arg) {
                 openForms.Add(arg.subForm);

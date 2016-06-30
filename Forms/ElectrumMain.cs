@@ -49,18 +49,16 @@ namespace Electrum {
             optionsBar = new OptionsBar();
             list = new FlowLayoutPanel();
             loadingImage = new PictureBox();
-            pathBar = new TextBox();
+            pathBar = new TextView();
 
             pathBar.Font = new Font(Font.FontFamily, 20f);
-            pathBar.Text = "";
-            pathBar.ReadOnly = true;
+            pathBar.Text = "Something";
             pathBar.Padding = new Padding(5);
             pathBar.BackColor = Color.FromArgb(0x25, 0x24, 0x23);
             pathBar.ForeColor = Color.Yellow;
             pathBar.AutoSize = false;
             pathBar.Size = new Size(Width, pathBar.Font.Height);
             pathBar.Location = new Point(0, 100);
-            pathBar.BorderStyle = BorderStyle.None;
             add(pathBar);
 
             loadingImage.Image = Properties.Resources.material_loading;
@@ -140,7 +138,7 @@ namespace Electrum {
         private int mostRecent = -1;
         private PictureBox loadingImage;
         private OptionsBar optionsBar;
-        private TextBox pathBar;
+        private TextView pathBar;
         private BackButton backButton;
         private FlowLayoutPanel list;
 
