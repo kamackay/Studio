@@ -43,3 +43,6 @@ C:\Documents\DevLocal\Studio\obj\x64\Debug\Electrum.csproj.GenerateResource.Cach
 C:\Keith\Studio\bin\policy.2.0.taglib-sharp.dll
 C:\Keith\Studio\bin\taglib-sharp.dll
 C:\Keith\Studio\bin\policy.2.0.taglib-sharp.config
+C:\documents\DevLocal\Studio\bin\policy.2.0.taglib-sharp.dll
+C:\documents\DevLocal\Studio\bin\taglib-sharp.dll
+C:\documents\DevLocal\Studio\bin\policy.2.0.taglib-sharp.config
