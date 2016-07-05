@@ -1,6 +1,7 @@
 ﻿using Global;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.IO.Pipes;
 using System.Linq;
@@ -63,6 +64,12 @@ namespace Electrum {
                     //Show some sort of settings screen
                 } else if (a.Button == MouseButtons.Left) openForm(new ElectrumMain());
             };
+            F.async(() => {try {
+                    foreach (string folder in Directory.EnumerateDirectories(settings.mainGitPath, "*", SearchOption.TopDirectoryOnly)) {
+                        Process.Start("git", string.Format("-C \"{0}\" pull", folder));
+                    }
+                }catch { }
+            });
         }
 
         bool runBackground = true;
@@ -224,9 +231,11 @@ namespace Electrum {
     public class Settings {
         public bool logging { get; set; }
         public bool picture { get; set; }
+        public string mainGitPath { get; set; }
 
         private Settings() {
             logging = false;
+            mainGitPath = @"C:\Documents\DevLocal";
         }
 
         public static Settings getDefault() {
