@@ -66,7 +66,7 @@ namespace Electrum {
             };
             F.async(() => {try {
                     foreach (string folder in Directory.EnumerateDirectories(settings.mainGitPath, "*", SearchOption.TopDirectoryOnly)) {
-                        Process.Start("git", string.Format("-C \"{0}\" pull", folder));
+                        //Process.Start("git", string.Format("-C \"{0}\" pull", folder));
                     }
                 }catch { }
             });

@@ -8,7 +8,7 @@ namespace Electrum.Controls {
 
         protected override void OnPaint(PaintEventArgs e) {
             e.Graphics.DrawString(Text, Font, System.Drawing.Brushes.Black, new System.Drawing.PointF(0, 0));
-            //base.OnPaint(e);
+            base.OnPaint(e);
         }
 
         protected override void OnPaintBackground(PaintEventArgs pevent) {

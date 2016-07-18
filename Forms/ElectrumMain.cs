@@ -49,7 +49,7 @@ namespace Electrum {
             optionsBar = new OptionsBar();
             list = new FlowLayoutPanel();
             loadingImage = new PictureBox();
-            pathBar = new TextView();
+            pathBar = new TextBox();
 
             pathBar.Font = new Font(Font.FontFamily, 20f);
             pathBar.Text = "Something";
@@ -138,7 +138,7 @@ namespace Electrum {
         private int mostRecent = -1;
         private PictureBox loadingImage;
         private OptionsBar optionsBar;
-        private TextView pathBar;
+        private TextBox pathBar;
         private BackButton backButton;
         private FlowLayoutPanel list;
 
@@ -197,21 +197,25 @@ namespace Electrum {
                         if (!loading) break;
                         Thread.Sleep(5);
                         this.runOnUiThread(() => {
-                            FolderButton button = new FolderButton(info);
-                            button.AutoSize = true;
-                            button.showAnimations = false;
-                            button.MinimumSize = new Size(Math.Max(500, (Width - 50) / 2), button.MinimumSize.Height);
-                            button.MouseClick += click;
-                            button.MouseDoubleClick += delegate (object o, MouseEventArgs args) {
-                                if (args.Button == MouseButtons.Left) {
-                                    if (File.Exists(info)) {
-                                        this._(() => { ((FolderButton)o).setSelected(false); });
-                                        Process.Start(info);
-                                    } else populate(info);
-                                }
-                            };
-                            list.Controls.Add(button);
-                            add(button, false);
+                            try {
+                                FolderButton button = new FolderButton(info);
+                                button.AutoSize = true;
+                                button.showAnimations = false;
+                                button.MinimumSize = new Size(Math.Max(500, (Width - 50) / 2), button.MinimumSize.Height);
+                                button.MouseClick += click;
+                                button.MouseDoubleClick += delegate (object o, MouseEventArgs args) {
+                                    if (args.Button == MouseButtons.Left) {
+                                        if (File.Exists(info)) {
+                                            this._(() => { ((FolderButton)o).setSelected(false); });
+                                            Process.Start(info);
+                                        } else populate(info);
+                                    }
+                                };
+                                list.Controls.Add(button);
+                                add(button, false);
+                            } catch (Exception e) {
+
+                            }
                         });
                     }
                 } catch (Exception) {
@@ -234,19 +238,21 @@ namespace Electrum {
         }
 
         private void loadDrives() {
-            this.runOnUiThread(() => { Text = defaultText; });
-            list.Controls.Clear();
-            this.runOnUiThread(() => { loadingImage.Visible = true; });
-            foreach (DriveInfo di in DriveInfo.GetDrives()) {
-                FolderButton b = new FolderButton();
-                b.Text = string.Format("{0} ({1})", di.ToString(), di.Name);
-                b.AutoSize = true;
-                b.DoubleClick += delegate {
-                    populate(di.RootDirectory);
-                };
-                list.Controls.Add(b);
-            }
-            this.runOnUiThread(() => { loadingImage.Visible = false; });
+            try {
+                this.runOnUiThread(() => { Text = defaultText; });
+                list.Controls.Clear();
+                this.runOnUiThread(() => { loadingImage.Visible = true; backButton.Visible = false; });
+                foreach (DriveInfo di in DriveInfo.GetDrives()) {
+                    FolderButton b = new FolderButton();
+                    b.Text = string.Format("{0} ({1})", di.ToString(), di.Name);
+                    b.AutoSize = true;
+                    b.DoubleClick += delegate {
+                        populate(di.RootDirectory);
+                    };
+                    list.Controls.Add(b);
+                }
+                this.runOnUiThread(() => { loadingImage.Visible = false; });
+            } catch (Exception e) { }
         }
 
         private void noneSelected() {
