@@ -57,6 +57,7 @@ namespace Electrum {
             pathBar.BackColor = Color.FromArgb(0x25, 0x24, 0x23);
             pathBar.ForeColor = Color.Yellow;
             pathBar.AutoSize = false;
+            pathBar.Visible = false;
             pathBar.Size = new Size(Width, pathBar.Font.Height);
             pathBar.Location = new Point(0, 100);
             add(pathBar);
@@ -147,7 +148,7 @@ namespace Electrum {
 
         protected void populate(DirectoryInfo path) {
             loading = false;
-            Thread.Sleep(10);
+            Thread.Sleep(100);
             loading = true;
             this.runOnUiThread(() => {
                 Text = path.FullName;
@@ -194,7 +195,7 @@ namespace Electrum {
                             });
                             x = 0;
                         }
-                        if (!loading) break;
+                        if (!loading) return;
                         Thread.Sleep(5);
                         this.runOnUiThread(() => {
                             try {
