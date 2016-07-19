@@ -253,6 +253,10 @@ namespace Global {
 
         public static void onClick(this Control control, Action a) { control.Click += delegate { a(); }; }
 
+        public static string toHex(this Color c) {
+            return "#" +c.A.ToString("X2") + c.R.ToString("X2") + c.G.ToString("X2") + c.B.ToString("X2");
+        }
+
     }
 
     public static class KeithApps {

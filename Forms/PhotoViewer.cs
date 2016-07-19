@@ -1,4 +1,5 @@
-﻿using Global;
+﻿using Electrum.Forms;
+using Global;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -165,6 +166,7 @@ namespace Electrum {
                 else if (m.WParam == (IntPtr)0x4F) PromptOpen();
                 else if (m.WParam == (IntPtr)0x43) copy(null, null);
                 else if (m.WParam == (IntPtr)0x53) save(null, null);
+                else if (m.WParam == (IntPtr)0x45) edit(null, null);
             }
 
             const uint WM_NCHITTEST = 0x0084;
@@ -209,7 +211,7 @@ namespace Electrum {
             if (!handled) base.WndProc(ref m);
         }
 
-        private void installInkscape() {
+        public void installInkscape() {
             try {
                 string msi = Path.Combine(Tools.getDataFolder(), "inkscape-installer.msi");
                 //File.WriteAllBytes(msi, Properties.Resources.inkscape_installer);
@@ -299,9 +301,18 @@ namespace Electrum {
                     new MenuItem("Open", new EventHandler(open)),
                     new MenuItem("Copy", new EventHandler(copy)),
                     new MenuItem("Save", new EventHandler(save)),
+                    new MenuItem("Edit", new EventHandler(edit)),
                     new MenuItem("Make Background Transparent", new EventHandler(makeBackTransparent)),
                     //new MenuItem("ConvertAllInDir", new EventHandler(allinDir)),
                     new MenuItem("Quit", new EventHandler(quit)) }).Show(ActiveForm, e.Location);
+        }
+
+        private void edit(object sender, EventArgs e) {
+            PhotoEditor pe = new PhotoEditor(openFile);
+            StudioContext.getCurrentInstance().formOpened(pe);
+            pe.Show();
+            StudioContext.getCurrentInstance().formClosed(this);
+            Close();
         }
 
         private void quit(object sender, EventArgs e) {
