@@ -16,6 +16,20 @@ namespace Electrum.Forms {
         Label colorsLabel, selectedColorLabel;
         Panel selectedColor;
 
+        private MouseEventHandler itemClick = delegate (object o, MouseEventArgs args) {
+            Control con = (Control)o;
+            if (args.Button == MouseButtons.Right) {
+                ContextMenu menu = new ContextMenu();
+                menu.MenuItems.AddRange(new MenuItem[] {
+                        new MenuItem("Delete This Color", delegate {
+                            //Delete all pixels of that color
+                            ((PhotoEditor)con.FindForm()).deleteColor();
+                        })
+                    });
+                menu.Show(con, new Point(0, 0));
+            }
+        };
+
         public PhotoEditor(string filename) {
             loadingImage = new PictureBox();
             loadingImage.Image = Properties.Resources.material_loading;
@@ -37,6 +51,7 @@ namespace Electrum.Forms {
             colors.Size = new Size(250, 500);
             colors.Font = new Font("Arial", 12f);
             colors.MinimumSize = new Size(100, 100);
+            colors.MouseDown += itemClick;
             Controls.Add(colors);
 
             colorsLabel = new Label();
@@ -60,7 +75,7 @@ namespace Electrum.Forms {
 
             selectedColor = new Panel();
             selectedColor.Size = new Size(100, 100);
-            selectedColor.Location = new Point(700, 150);
+            selectedColor.Location = new Point(700, 175);
             selectedColor.BackColor = Color.White;
             Controls.Add(selectedColor);
 
@@ -70,7 +85,7 @@ namespace Electrum.Forms {
                 Color c = new Bitmap(pic.BackgroundImage).GetPixel(args.Location.X, args.Location.Y);
                 selectedColor.BackColor = c;
                 selectedColor.Invalidate();
-                selectedColorLabel.Text = string.Format("Selected Color \n    {0}", c.toHex());
+                selectedColorLabel.Text = string.Format("Selected Color {0}{1}{0}[{2},{3}]", "\n    ", c.toHex(), args.Location.X, args.Location.Y);
                 selectedColorLabel.Height = selectedColorLabel.PreferredHeight;
             };
 
@@ -173,25 +188,38 @@ namespace Electrum.Forms {
                 foreach (Color c in map.Keys) {
                     colors.runOnUiThread(() => { colors.Items.Add(string.Format("{0} - {1}", c.toHex(), map[c])); });
                 }
+                /*this.runOnUiThread(() => {
+                    foreach (var c in colors.Items) {
+                        ((Control)c).MouseClick += itemClick;
+                    }
+                });/**/
             });/**/
         }
 
         public void showLoading(bool shown = true) {
             loadingImage.runOnUiThread(() => { loadingImage.Visible = shown; });
         }
-        /*
-        protected virtual void onSubFormOpened(FormOpenEventArgs args) {
-            subFormOpened?.Invoke(this, args);
-            if (subFormOpened == null) StudioContext.getCurrentInstance().formOpened(args.subForm);
-        }
+      
 
-        public event EventHandler<FormOpenEventArgs> subFormOpened;
-
-        public class FormOpenEventArgs : EventArgs {
-            public Form subForm { get; set; }
-            public FormOpenEventArgs(Form form) {
-                subForm = form;
+        private void deleteColor() {
+            try {
+                string s = colors.Items[colors.SelectedIndex].ToString();
+                string hex = s.Split('#')[1].Split(' ')[0];
+                Color c = (Color)new ColorConverter().ConvertFromString("#" + hex);
+                Bitmap b = new Bitmap(pic.BackgroundImage);
+                if (c != null) {
+                    for (int i = 0; i < b.Height; i++) {
+                        for (int j = 0; j < b.Width; j++) {
+                            if (b.GetPixel(j, i).Equals(c)) {
+                                b.SetPixel(j, i, Color.Transparent);
+                            }
+                        }
+                    }
+                    pic.BackgroundImage = b;
+                }
+            } catch (Exception e) {
+                MessageBox.Show(e.Message);
             }
-        }/**/
+        }
     }
 }
