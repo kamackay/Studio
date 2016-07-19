@@ -9,7 +9,7 @@ using System.Threading;
 using System.Windows.Forms;
 
 namespace Electrum {
-    public partial class ElectrumMain : KeithForm {
+    public partial class ElectrumMain : ElectrumForm {
         public ElectrumMain() : base() {
             InitializeComponent();
             initialActions = () => {

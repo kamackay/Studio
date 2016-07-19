@@ -3,7 +3,7 @@ using System.Drawing.Imaging;
 using System.Threading;
 
 namespace Electrum {
-    partial class GifViewer : KeithForm {
+    partial class GifViewer : ElectrumForm {
         public GifViewer() {
             InitializeComponent();
             init();

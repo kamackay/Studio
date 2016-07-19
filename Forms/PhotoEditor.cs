@@ -8,7 +8,7 @@ using System.Threading;
 using System.Windows.Forms;
 
 namespace Electrum.Forms {
-    public class PhotoEditor : KeithForm {
+    public class PhotoEditor : ElectrumForm {
 
         private string openFile;
         PictureBox pic, loadingImage;

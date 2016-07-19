@@ -135,7 +135,7 @@ namespace Electrum {
                 openForms.Remove(f);
                 if (openForms.Count == 0) quit();
             };
-            f.subFormOpened += delegate (object o, KeithForm.FormOpenEventArgs arg) {
+            f.subFormOpened += delegate (object o, ElectrumForm.FormOpenEventArgs arg) {
                 openForms.Add(arg.subForm);
                 arg.subForm.FormClosing += delegate {
                     openForms.Remove(arg.subForm);
@@ -171,8 +171,8 @@ namespace Electrum {
                 openForms.Remove(f);
                 if (openForms.Count == 0) quit();
             };
-            if (f is KeithForm)
-                ((KeithForm)f).subFormOpened += delegate (object o, KeithForm.FormOpenEventArgs arg) {
+            if (f is ElectrumForm)
+                ((ElectrumForm)f).subFormOpened += delegate (object o, ElectrumForm.FormOpenEventArgs arg) {
                     openForms.Add(arg.subForm);
                     arg.subForm.FormClosing += delegate {
                         openForms.Remove(arg.subForm);

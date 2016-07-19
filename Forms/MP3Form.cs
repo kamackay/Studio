@@ -9,7 +9,7 @@ using System.Threading;
 using System.Windows.Forms;
 
 namespace Electrum {
-    public class MP3Form : KeithForm {
+    public class MP3Form : ElectrumForm {
         public MP3Form() {
             InitializeComponent();
             init();
