@@ -87,7 +87,7 @@ namespace Electrum {
                 new OptionsBar.Option { title = "Open File", onClick = () => { this.f(); } },
                 new OptionsBar.Option { title = "Exit", onClick = () => { Close(); } },
                 new OptionsBar.Option {holdRight = true, title = "Right",
-                    onClick = () => { } }/*,
+                    onClick = () => { Toast.show("That doesn't do anything yet"); } }/*,
                 new OptionsBar.Option {holdRight = true, title = "Right 2",
                     onClick = () => { } }/**/
             });

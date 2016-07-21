@@ -56,14 +56,14 @@ namespace Global {
                 Shown += delegate {
                     Height = multiLine ? 100 : 50;
                     Size s = Screen.PrimaryScreen.WorkingArea.Size;
-                    Top = s.Height - Height;
-                    Left = s.Width;
+                    Top = s.Height;
+                    Left = (s.Width - Width) / 2;
                     new Thread(new ThreadStart(() => {
                         try {
-                            for (int i = 0; i < (Width - 10) / increment; i++) {
+                            for (int i = 0; i < (Height) / increment; i++) {
                                 Thread.Sleep(animDelay);
                                 this.runOnUiThread(() => {
-                                    Left -= increment;
+                                    Top -= increment;
                                 });
                             }
                         } catch (Exception) { kill(); }
@@ -76,7 +76,7 @@ namespace Global {
         }
 
         const int timeout = 4000;
-        const string windowName = "KeithAppsToast";
+        const string windowName = "ElectrumToast";
 
         public void kill() {
             this.runOnUiThread(() => {
@@ -85,22 +85,39 @@ namespace Global {
             });
         }
 
+        protected override bool ShowWithoutActivation {
+            get {
+                return true;
+            }
+        }
+
+        private const int WM_MOUSEACTIVATE = 0x0021, MA_NOACTIVATE = 0x0003;
+
+        protected override void WndProc(ref Message m) {
+            if (m.Msg == WM_MOUSEACTIVATE) {
+                m.Result = (IntPtr)MA_NOACTIVATE;
+                return;
+            }
+            base.WndProc(ref m);
+        }
+
         protected override void Dispose(bool disposing) {
             if (disposing && (components != null))
                 components.Dispose();
             base.Dispose(disposing);
         }
 
-        private const int increment = 5, animDelay = 15;
+        private const int increment = 5, animDelay = 30;
         private bool running = true;
-        void OnTimerElapsed(object state) {try {
+        void OnTimerElapsed(object state) {
+            try {
                 new Thread(new ThreadStart(() => {
                     try {
-                        for (int i = 0; i < (Width - 10) / increment; i++) {
+                        for (int i = 0; i < (Height) / increment; i++) {
                             if (!running) return;
                             Thread.Sleep(animDelay);
                             this.runOnUiThread(() => {
-                                Left += increment;
+                                Top += increment;
                             });
                         }
                         kill();
