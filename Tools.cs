@@ -1,15 +1,20 @@
 ﻿using System;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
-namespace Global {
+namespace Electrum {
     public class Tools {
         public static string getDataFolder() {
             string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), Application.ProductName);
             try { if (!Directory.Exists(path)) Directory.CreateDirectory(path); } catch { }
             return path;
+        }
+
+        public static string getExeFolder() {
+            return Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
         }
 
         public static long getFolderBytes(string path) {
@@ -94,6 +99,19 @@ namespace Global {
             } catch (Exception ex) {
                 Toast.show("An Exception occured during move, " + ex.Message);
             }
+        }
+
+        public static string selectFolder(string startingPath = "c:\\") {
+            Microsoft.Office.Interop.Excel.Application app = new Microsoft.Office.Interop.Excel.Application();
+            Microsoft.Office.Core.FileDialog fileDialog = app.get_FileDialog(Microsoft.Office.Core.MsoFileDialogType.msoFileDialogFolderPicker);
+            fileDialog.InitialFileName = startingPath;
+            int nres = fileDialog.Show();
+            if (nres == -1) {
+                Microsoft.Office.Core.FileDialogSelectedItems selectedItems = fileDialog.SelectedItems;
+                string[] selectedFolders = selectedItems.Cast<string>().ToArray();
+                if (selectedFolders.Length > 0) return selectedFolders[0];
+            }
+            return null;
         }
     }
 }

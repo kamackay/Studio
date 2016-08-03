@@ -1,5 +1,4 @@
-﻿using System;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Text;
@@ -16,6 +15,17 @@ namespace MaterialSkin.Controls {
         public MouseState MouseState { get; set; }
         public bool Primary { get; set; }
         public bool textAllCaps = true;
+        private bool customTextColor = false;
+        /// <summary>
+        /// Set the forecolor of this element
+        /// </summary>
+        /// <param name="color">The Color - use null to reset to material default</param>
+        public void setForeColor(Color color) {
+            if (color != null) {
+                ForeColor = color;
+                customTextColor = true;
+            } else customTextColor = false;
+        }
 
         private readonly AnimationManager animationManager;
         private readonly AnimationManager hoverAnimationManager;
@@ -81,8 +91,8 @@ namespace MaterialSkin.Controls {
             }
             g.DrawString(textAllCaps ? Text.ToUpper() : Text,
                 SkinManager.ROBOTO_MEDIUM_10,
-                Enabled ? (Primary ? SkinManager.ColorScheme.PrimaryBrush : SkinManager.GetPrimaryTextBrush())
-                    : SkinManager.GetFlatButtonDisabledTextBrush(),
+                customTextColor ? new SolidBrush(ForeColor) : (Enabled ? (Primary ? SkinManager.ColorScheme.PrimaryBrush : SkinManager.GetPrimaryTextBrush())
+                    : SkinManager.GetFlatButtonDisabledTextBrush()),
                 ClientRectangle,
                 new StringFormat { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center });
         }

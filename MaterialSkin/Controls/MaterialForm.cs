@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
-using System.Drawing.Text;
-using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
@@ -11,7 +9,7 @@ namespace MaterialSkin.Controls {
     public class MaterialForm : Form, IMaterialControl {
 
         public MaterialForm() {
-            FormBorderStyle = FormBorderStyle.None;
+            //FormBorderStyle = FormBorderStyle.None;
             Sizable = true;
             DoubleBuffered = true;
             SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.ResizeRedraw, true);
@@ -158,7 +156,7 @@ namespace MaterialSkin.Controls {
                 // This re-enables resizing by letting the application know when the
                 // user is trying to resize a side. This is disabled by default when using WS_SYSMENU.
                 if (!Sizable) return;
-
+                /*
                 byte bFlag = 0;
 
                 // Get which side to resize from
@@ -166,7 +164,7 @@ namespace MaterialSkin.Controls {
                     bFlag = (byte)resizingLocationsToCmd[(int)m.WParam];
 
                 if (bFlag != 0)
-                    SendMessage(Handle, WM_SYSCOMMAND, 0xF000 | bFlag, (int)m.LParam);
+                    SendMessage(Handle, WM_SYSCOMMAND, 0xF000 | bFlag, (int)m.LParam);/**/
             } else if (m.Msg == WM_LBUTTONUP) {
                 headerMouseDown = false;
             }
@@ -186,8 +184,8 @@ namespace MaterialSkin.Controls {
             if (DesignMode) return;
             UpdateButtons(e);
 
-            if (e.Button == MouseButtons.Left && !Maximized)
-                ResizeForm(resizeDir);
+            //if (e.Button == MouseButtons.Left && !Maximized)
+              //ResizeForm(resizeDir);
             base.OnMouseDown(e);
         }
 
@@ -197,7 +195,7 @@ namespace MaterialSkin.Controls {
             buttonState = ButtonState.None;
             Invalidate();
         }
-
+        /*
         protected override void OnMouseMove(MouseEventArgs e) {
             base.OnMouseMove(e);
 
@@ -233,7 +231,7 @@ namespace MaterialSkin.Controls {
             }
 
             UpdateButtons(e);
-        }
+        }/**/
 
         protected void OnGlobalMouseMove(object sender, MouseEventArgs e) {
             if (!IsDisposed) {
@@ -356,7 +354,7 @@ namespace MaterialSkin.Controls {
 
         private Brush xHoverBrush;
 
-        protected override void OnPaint(PaintEventArgs e) {
+        protected override void OnPaint(PaintEventArgs e) {/*
             var g = e.Graphics;
             g.TextRenderingHint = TextRenderingHint.AntiAlias;
 
@@ -446,6 +444,7 @@ namespace MaterialSkin.Controls {
 
             //Form title
             g.DrawString(Text, SkinManager.ROBOTO_MEDIUM_12, SkinManager.ColorScheme.TextBrush, new Rectangle(SkinManager.FORM_PADDING, STATUS_BAR_HEIGHT, Width, ACTION_BAR_HEIGHT), new StringFormat { LineAlignment = StringAlignment.Center });
+        /**/
         }
 
         public bool showIcon = true;

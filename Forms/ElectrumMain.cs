@@ -1,5 +1,4 @@
 ﻿using Electrum.Controls;
-using Global;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -34,7 +33,6 @@ namespace Electrum {
             base.Dispose(disposing);
         }
 
-        const int t = 100;
         const string defaultText = "Welcome to Electrum Studios";
 
         /// <summary>
@@ -49,31 +47,19 @@ namespace Electrum {
             optionsBar = new OptionsBar();
             list = new FlowLayoutPanel();
             loadingImage = new PictureBox();
-            pathBar = new TextBox();
-
-            pathBar.Font = new Font(Font.FontFamily, 20f);
-            pathBar.Text = "Something";
-            pathBar.Padding = new Padding(5);
-            pathBar.BackColor = Color.FromArgb(0x25, 0x24, 0x23);
-            pathBar.ForeColor = Color.Yellow;
-            pathBar.AutoSize = false;
-            pathBar.Visible = false;
-            pathBar.Size = new Size(Width, pathBar.Font.Height);
-            pathBar.Location = new Point(0, 100);
-            add(pathBar);
 
             loadingImage.Image = Properties.Resources.material_loading;
             loadingImage.BackgroundImageLayout = ImageLayout.Zoom;
             loadingImage.BackColor = Color.Transparent;
             loadingImage.Size = new Size(50, 40);
-            loadingImage.Location = new Point(60, 120 + pathBar.Height);
+            loadingImage.Location = new Point(60, 30);
             loadingImage.SizeMode = PictureBoxSizeMode.Zoom;
             loadingImage.Visible = false;
             add(loadingImage);
 
             backButton = new BackButton();
             backButton.Size = new Size(50, 50);
-            backButton.Location = new Point(0, 110 + pathBar.Height);
+            backButton.Location = new Point(0, 30);
             backButton.Visible = false;
             backButton.MouseClick += delegate (object o, MouseEventArgs args) {
                 if (args.Button == MouseButtons.Left) {
@@ -85,17 +71,17 @@ namespace Electrum {
 
             optionsBar.setOptions(new OptionsBar.Option[] {
                 new OptionsBar.Option { title = "Open File", onClick = () => { this.f(); } },
-                new OptionsBar.Option { title = "Exit", onClick = () => { Close(); } },
-                new OptionsBar.Option {holdRight = true, title = "Right",
-                    onClick = () => { Toast.show("That doesn't do anything yet"); } }/*,
+                new OptionsBar.Option { title = "Exit", onClick = () => { Environment.Exit(0); } },
+                new OptionsBar.Option {holdRight = true, title = "MP3 Manager",
+                    onClick = () => { StudioContext.getCurrentInstance().formOpened(new MP3Options()); Close(); } }/*,
                 new OptionsBar.Option {holdRight = true, title = "Right 2",
                     onClick = () => { } }/**/
             });
-            optionsBar.setBackgroundColor(Color.FromArgb(0x50, 0x50, 0x50));
+            optionsBar.setBackgroundColor(Color.FromArgb(0xFF, 0xEE, 0x58));//
+            optionsBar.setTextColor(Color.FromArgb(0x50, 0x50, 0x50));
             add(optionsBar);
 
             list.Dock = DockStyle.Bottom;
-            list.Height = Height - backButton.Bottom;
             list.FlowDirection = FlowDirection.TopDown;
             list.AutoScroll = true;
             list.MouseClick += delegate (object o, MouseEventArgs args) {
@@ -107,9 +93,8 @@ namespace Electrum {
             Resize += delegate {
                 optionsBar.Width = Width;
                 optionsBar.runResize();
-                list.Height = Height - backButton.Bottom;
+                list.Height = Height - (backButton.Bottom + 50);
                 setButtonsWidth();
-                pathBar.Width = Width;
             };
 
             add(list);
@@ -118,7 +103,8 @@ namespace Electrum {
                 loadingImage.SendToBack();
                 optionsBar.Height = 30;
                 optionsBar.Width = Width;
-                optionsBar.Top = 70;
+                optionsBar.Top = 0;
+                list.Height = Height - (backButton.Bottom + 50);
             };
 
             MouseClick += delegate (object o, MouseEventArgs args) {
@@ -139,20 +125,21 @@ namespace Electrum {
         private int mostRecent = -1;
         private PictureBox loadingImage;
         private OptionsBar optionsBar;
-        private TextBox pathBar;
         private BackButton backButton;
         private FlowLayoutPanel list;
 
         private static bool loading = true;
+        private Thread loadingThread = null;
         private string currentPath = string.Empty;
 
         protected void populate(DirectoryInfo path) {
+            if (loadingThread != null && (loadingThread.ThreadState == System.Threading.ThreadState.Running || loadingThread.IsAlive)) {
+                loadingThread.Abort();
+            }
             loading = false;
             Thread.Sleep(100);
             loading = true;
             this.runOnUiThread(() => {
-                Text = path.FullName;
-                pathBar.Text = Text;
                 if (!backButton.Visible) backButton.Visible = true;
                 loadingImage.Visible = true;
                 setAnimations(false);
@@ -161,7 +148,7 @@ namespace Electrum {
             currentPath = path.FullName;
             //SuspendLayout();
             list.Controls.Clear();
-            F.async(() => {
+            loadingThread = F.async(() => {
                 try {
                     MouseEventHandler click = delegate (object o, MouseEventArgs args) {
                         try {
@@ -208,7 +195,7 @@ namespace Electrum {
                                     if (args.Button == MouseButtons.Left) {
                                         if (File.Exists(info)) {
                                             this._(() => { ((FolderButton)o).setSelected(false); });
-                                            Process.Start(info);
+                                            StudioContext.getCurrentInstance().openFile(info, null, true);
                                         } else populate(info);
                                     }
                                 };

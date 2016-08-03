@@ -1,5 +1,4 @@
-﻿using Global;
-using MaterialSkin.Controls;
+﻿using MaterialSkin.Controls;
 using System;
 using System.Drawing;
 using System.IO;
@@ -43,10 +42,12 @@ namespace Electrum {
         void open() {
             OpenFileDialog o = new OpenFileDialog();
             o.InitialDirectory = (currentFileName == null) ? Properties.Settings.Default.MusicFilePath : Path.GetDirectoryName(currentFileName);
-            o.Multiselect = false;
-            if (o.ShowDialog() == DialogResult.OK)
-                loadFile(o.FileName);
-            else if (currentFileName == null) Close();
+            o.Multiselect = true;
+            if (o.ShowDialog() == DialogResult.OK) {
+                if (o.FileNames.Length > 1)
+                    for (int i = 1; i < o.FileNames.Length; i++) StudioContext.getCurrentInstance().formOpened(new MP3Form(o.FileNames[i]));
+                loadFile(o.FileNames[0]);
+            } else if (currentFileName == null) Close();
         }
 
         void loadFile(string filename) {
@@ -135,8 +136,6 @@ namespace Electrum {
             saveButton.Text = "Main Screen";
             saveAction = false;
         }
-
-        const short minTop = 60;
 
         private void InitializeComponent() {
             saveAction = true;
@@ -264,10 +263,12 @@ namespace Electrum {
                 sizeChanged();
                 tagTitle.Focus();
             };
+            FormClosing += delegate {
+                StudioContext.getCurrentInstance().formClosed(this);
+            };
             StartPosition = FormStartPosition.CenterScreen;
             AutoScaleDimensions = new SizeF(6F, 13F);
             AutoScaleMode = AutoScaleMode.Font;
-            BackColor = SystemColors.ButtonShadow;
             ClientSize = new Size(initialWidth, initialHeight);
             Controls.Add(label4);
             Controls.Add(tagAlbumArtist);
@@ -297,7 +298,6 @@ namespace Electrum {
             ((System.ComponentModel.ISupportInitialize)(pictureBox1)).EndInit();
             ResumeLayout(false);
             PerformLayout();
-            foreach (Control c in Controls) c.Top += minTop;
         }
 
         void saveFile(bool save = false) {
@@ -325,7 +325,7 @@ namespace Electrum {
                             file.Tag.Pictures = new TagLib.IPicture[1] { pic };
                         }
                         file.Save();
-                        AutoClosingMessageBox.show("Saved Successfully", "File Saved", 1000);
+                        Toast.show("Saved Successfully");
                         loadFile(currentFileName);
                         saved();
                     } catch (Exception ex) {
@@ -333,7 +333,7 @@ namespace Electrum {
                         //string appDataPath = Path.Combine(Tools.getDataFolder(), Path.GetFileName(currentFileName));
                         //TagLib doesn't support that...
                         //Give Up?
-                        MessageBox.Show("Error Occurred while saving file: " + ex.Message);
+                        MessageBox.Show(string.Format("Error Occurred while saving file: {0}\nWould you like to save it elsewhere?" , ex.Message), "Error", MessageBoxButtons.YesNo);
                     }
                 }
             } else {

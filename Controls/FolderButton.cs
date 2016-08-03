@@ -7,7 +7,6 @@ using System.Windows.Forms;
 using System.Drawing.Drawing2D;
 using System.Drawing.Text;
 using System.IO;
-using Global;
 using System.Threading;
 using Etier.IconHelper;
 using System.Diagnostics;
