@@ -1,4 +1,5 @@
-﻿using MaterialSkin.Controls;
+﻿using Global;
+using MaterialSkin.Controls;
 using System;
 using System.Drawing;
 using System.Windows.Forms;
@@ -7,7 +8,6 @@ namespace Electrum.Controls {
     public class OptionsBar : UserControl {
 
         private Option[] options;
-        private Color textColor = Color.Black;
 
         public OptionsBar() {
             Resize += delegate {
@@ -21,16 +21,15 @@ namespace Electrum.Controls {
             Controls.Clear();
             this.options = options;
             this._(() => {
-                int x = 0, x_r = Width - 20;
+                int x = 0, x_r = Width;
                 foreach (Option o in options) {
                     MaterialFlatButton button = new MaterialFlatButton();
                     button.Text = o.title;
-                    button.setForeColor(textColor);
                     button.Height = (int)(Height * .75);
                     button.Location = new Point(o.holdRight ? x_r : x, 0);
                     if (o.holdRight)
                         Resize += delegate {
-                            button.Left = Width - (button.Width + 20);
+                            button.Left = Width - button.Width;
                         };/**/
                     button.textAllCaps = false;
                     button.onClick(() => { o.run(); });
@@ -43,13 +42,7 @@ namespace Electrum.Controls {
             }, 1000);
         }
 
-        public void runResize() { OnResize(new EventArgs()); }
-
-        public void setTextColor(Color color) {
-            textColor = color;
-            foreach (Control c in Controls)
-                if (c is MaterialFlatButton) ((MaterialFlatButton)c).setForeColor(color);
-        }
+        public void runResize() { this.OnResize(new EventArgs()); }
 
         public void setBackgroundColor(Color c) {
             BackColor = c;

@@ -4,7 +4,7 @@ using System.ComponentModel;
 using System.Threading;
 using System;
 
-namespace Electrum {
+namespace Global {
     public class Toast : Form {
         public static void show(string message) {
             try {

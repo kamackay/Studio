@@ -977,7 +977,7 @@ namespace MaterialSkin.Controls
 
 			//Fix for tabstop
 			baseTextBox.TabStop = true;
-            TabStop = false;
+			this.TabStop = false;
         }
 
         protected override void OnPaint(PaintEventArgs pevent)

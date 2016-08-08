@@ -1,4 +1,4 @@
-﻿using Electrum.Utils;
+﻿using Global;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -27,8 +27,6 @@ namespace Electrum {
         internal NotifyIcon trayIcon;
 
         private void init(string[] args) {
-            AppDomain currentDomain = AppDomain.CurrentDomain;
-            currentDomain.UnhandledException += new UnhandledExceptionEventHandler(MyExceptionHandler);
             openForms = new List<Form>();
             settings = Settings.getDefault();
             F.async(() => {/**/
@@ -64,21 +62,14 @@ namespace Electrum {
             trayIcon.MouseClick += delegate (object o, MouseEventArgs a) {
                 if (a.Button == MouseButtons.Right) {
                     //Show some sort of settings screen
-                    Environment.Exit(0);
                 } else if (a.Button == MouseButtons.Left) openForm(new ElectrumMain());
             };
-            F.async(() => {
-                try {
+            F.async(() => {try {
                     foreach (string folder in Directory.EnumerateDirectories(settings.mainGitPath, "*", SearchOption.TopDirectoryOnly)) {
                         //Process.Start("git", string.Format("-C \"{0}\" pull", folder));
                     }
-                } catch { }
+                }catch { }
             });
-        }
-
-        private void MyExceptionHandler(object sender, UnhandledExceptionEventArgs e) {
-            Log.log(e.ExceptionObject.ToString());
-            Environment.Exit(0);
         }
 
         bool runBackground = true;
@@ -92,9 +83,7 @@ namespace Electrum {
                 if (temp.StartsWith("--")) parameters.Add(temp.ToLower());
                 else arguments.Add(temp.ToLower());
             }
-            if (parameters.Contains("--svc")) settings.service = true;
             if (parameters.Contains("--picture")) settings.picture = true;
-            else if (parameters.Contains("--mp3")) settings.music = true;
             if (arguments.Count > 0) {
                 if (File.Exists(arguments[0].Trim())) {
                     if (FileTypes.isImage(arguments[0].Trim())) settings.picture = true;
@@ -127,8 +116,6 @@ namespace Electrum {
                         f.Show();
                     }
                 } catch { }
-            } else if (settings.music) {
-                openForm(new MP3Options());
             } else {
                 try {
                     if (arguments.Count == 0) openHomeScreen();
@@ -140,10 +127,6 @@ namespace Electrum {
                     MessageBox.Show("Error: " + e.Message);
                 }
             }
-        }
-
-        public void kaboom() {
-            throw new Exception("BOOM");
         }
 
         public void openHomeScreen() {
@@ -170,26 +153,36 @@ namespace Electrum {
             }
         }
 
-        public void formOpened(Form f, bool show = true) {
+        public void formOpened(Form f) {
             try {
                 if (f != null && !openForms.Contains(f)) openForms.Add(f);
-                if (show) f.Show();
             } catch { }
         }
 
         public void formClosed(Form f = null) {
             try {
                 if (f != null) openForms.Remove(f);
-                if (openForms.Count == 0 && !settings.service) quit();
+                if (openForms.Count == 0) quit();
             } catch { }
         }
 
-        void openForm(Form f) {/*
+        void openForm(Form f) {
             f.FormClosing += delegate {
                 openForms.Remove(f);
                 if (openForms.Count == 0) quit();
             };
-            openForms.Add(f);/**/
+            if (f is ElectrumForm)
+                ((ElectrumForm)f).subFormOpened += delegate (object o, ElectrumForm.FormOpenEventArgs arg) {
+                    openForms.Add(arg.subForm);
+                    arg.subForm.FormClosing += delegate {
+                        openForms.Remove(arg.subForm);
+                    };
+                };
+            //else if (f is MainForm)
+            //    ((MainForm)f).FormClosed += delegate {
+            //        formClosed(f);
+            //    };
+            openForms.Add(f);
             f.Show();
         }
 
@@ -199,7 +192,7 @@ namespace Electrum {
             Environment.Exit(0);//In Case the last one didn't work
         }
 
-        public void openFile(string filename, Form f = null, bool openExternal = false) {
+        public void openFile(string filename, Form f = null) {
             try {
                 string ext = Path.GetExtension(filename);
                 switch (ext.ToLower()) {
@@ -217,11 +210,11 @@ namespace Electrum {
                 }
 
                 // Handle all filetypes here
-                handleFile(filename, f, openExternal);
+                handleFile(filename);
             } catch (Exception e) { MessageBox.Show(e.Message, "Electrum Studios error"); }
         }
 
-        public void handleFile(string filename, Form f = null, bool openExternal = false) {
+        public void handleFile(string filename, Form f = null) {
             if (FileTypes.isImage(filename)) {
                 if (string.Equals(".gif", Path.GetExtension(filename), StringComparison.OrdinalIgnoreCase)) openForm(new GifViewer(filename));
                 else openForm(new PhotoViewer(filename));
@@ -230,7 +223,6 @@ namespace Electrum {
             } else if (FileTypes.isAudio(filename)) {
 
             }
-            //if (openExternal) Process.Start(filename);
         }
 
         private List<Form> openForms;
@@ -239,8 +231,6 @@ namespace Electrum {
     public class Settings {
         public bool logging { get; set; }
         public bool picture { get; set; }
-        public bool music { get; set; }
-        public bool service { get; set; } = false;
         public string mainGitPath { get; set; }
 
         private Settings() {

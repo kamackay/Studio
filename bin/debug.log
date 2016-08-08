@@ -29,4 +29,3 @@
 [0627/142608:ERROR:ipc_channel_win.cc(217)] pipe error: 109
 [0627/142608:WARNING:raw_channel_win.cc(532)] WriteFile: The pipe is being closed. (0xE8)
 [0627/142608:WARNING:channel.cc(359)] RawChannel write error
-[0803/155028:INFO:child_thread_impl.cc(732)] ChildThreadImpl::EnsureConnected()

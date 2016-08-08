@@ -1,4 +1,5 @@
 ﻿using Electrum.Forms;
+using Global;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -86,7 +87,7 @@ namespace Electrum {
 
         private void LoadImage(string p) {
             showLoading();
-            BackColor = Color.Black;
+            this.runOnUiThread(() => { BackColor = Color.Black; });
             try {
                 if (!File.Exists(p)) NoImage();
                 string ext = Path.GetExtension(p).ToLower();
@@ -121,19 +122,20 @@ namespace Electrum {
                 } else {
                     Bitmap b = new Bitmap(p);
                     Size s = Shrink(b.Size);
-                    //Size = s;
+                    Size = s;
                     b = new Bitmap(b, s);// Resize the bitmap so that needlessly large images can still be loaded
-                    //BackgroundImage = b;
+                    BackgroundImage = b;
                     img = b;
                     postImageSet();
                 }
                 BackgroundImageLayout = ImageLayout.Zoom;
                 openFile = p;
                 Text = Path.GetFileName(openFile);
-                //Focus();
-                //BringToFront();
+                Focus();
+                BringToFront();
             } catch (Exception e) {
-                MessageBox.Show("Error: " + e.ToString() + "\nfile - " + p);
+                MessageBox.Show("Error: " + e.Message + "\nfile - " + p);
+                Environment.Exit(0);
             }
         }
 
@@ -329,7 +331,7 @@ namespace Electrum {
         }
 
         public void showLoading(bool shown = true) {
-            //loadingImage.runOnUiThread(() => { loadingImage.Visible = shown; });
+            loadingImage.runOnUiThread(() => { loadingImage.Visible = shown; });
         }
 
         private void open(object sender, EventArgs e) {

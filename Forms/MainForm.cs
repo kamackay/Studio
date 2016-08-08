@@ -522,7 +522,15 @@ namespace Electrum {
             return (Uri.TryCreate(s, UriKind.Absolute, out result) && result.Scheme == Uri.UriSchemeHttp) ||
                 s.StartsWith("www.") || s.Contains(".com") || s.Contains(".edu") || s.Contains(".org");
         }
-        
+
+        public static void runOnUiThread(this Control control, Action runnable) {
+            try {
+                control.Invoke(runnable);
+            } catch (Exception) {
+                //Eat the exception
+            }
+        }
+
         /// <summary>
         /// Run on the UI Thread
         /// </summary>

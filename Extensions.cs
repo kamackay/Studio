@@ -9,10 +9,10 @@ using System.Diagnostics;
 using System.Collections.Specialized;
 using System.Text.RegularExpressions;
 using System.Collections.Generic;
+using Electrum;
 using System.Threading;
-using Electrum.Utils;
 
-namespace Electrum {
+namespace Global {
     public static class Extensions {
 
         /// <summary>
@@ -56,10 +56,9 @@ namespace Electrum {
 
         public static void runOnUiThread(this Control control, Action runnable) {
             try {
-                if (control.InvokeRequired) control.Invoke(runnable);
-                else runnable.Invoke();
-            } catch (Exception e) {
-                Log.log(e.Message);
+                control.Invoke(runnable);
+            } catch (Exception) {
+                //Eat the exception
             }
         }
 
