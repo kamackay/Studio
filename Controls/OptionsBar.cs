@@ -8,6 +8,8 @@ namespace Electrum.Controls {
     public class OptionsBar : UserControl {
 
         private Option[] options;
+        private bool customFontColor = false;
+        private Color fontColor;
 
         public OptionsBar() {
             Resize += delegate {
@@ -21,15 +23,16 @@ namespace Electrum.Controls {
             Controls.Clear();
             this.options = options;
             this._(() => {
-                int x = 0, x_r = Width;
+                int x = 0, x_r = Width - 20;
                 foreach (Option o in options) {
                     MaterialFlatButton button = new MaterialFlatButton();
                     button.Text = o.title;
+                    if (customFontColor) button.setFontColor(fontColor);
                     button.Height = (int)(Height * .75);
                     button.Location = new Point(o.holdRight ? x_r : x, 0);
                     if (o.holdRight)
                         Resize += delegate {
-                            button.Left = Width - button.Width;
+                            button.Left = Width - (button.Width + 20);
                         };/**/
                     button.textAllCaps = false;
                     button.onClick(() => { o.run(); });
@@ -42,11 +45,23 @@ namespace Electrum.Controls {
             }, 1000);
         }
 
-        public void runResize() { this.OnResize(new EventArgs()); }
+        public void runResize() { OnResize(new EventArgs()); }
 
         public void setBackgroundColor(Color c) {
             BackColor = c;
             Invalidate();
+        }
+
+        public void setFontColor(Color? c = null) {
+            if (c == null) customFontColor = false;
+            else {
+                customFontColor = true;
+                fontColor = (Color)c;
+                foreach (Control el in Controls) {
+                    el.ForeColor = (Color)c;
+                    if (el is MaterialFlatButton) ((MaterialFlatButton)el).setFontColor(c);
+                }
+            }
         }
 
         protected override void OnPaint(PaintEventArgs e) {

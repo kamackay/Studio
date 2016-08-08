@@ -11,7 +11,7 @@ namespace MaterialSkin.Controls {
     public class MaterialForm : Form, IMaterialControl {
 
         public MaterialForm() {
-            FormBorderStyle = FormBorderStyle.None;
+            FormBorderStyle = FormBorderStyle.Sizable;
             Sizable = true;
             DoubleBuffered = true;
             SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.ResizeRedraw, true);
@@ -361,8 +361,8 @@ namespace MaterialSkin.Controls {
             g.TextRenderingHint = TextRenderingHint.AntiAlias;
 
             g.Clear(SkinManager.GetApplicationBackgroundColor());
-            g.FillRectangle(SkinManager.ColorScheme.DarkPrimaryBrush, statusBarBounds);
-            g.FillRectangle(SkinManager.ColorScheme.PrimaryBrush, actionBarBounds);
+            //g.FillRectangle(SkinManager.ColorScheme.DarkPrimaryBrush, statusBarBounds);
+            //g.FillRectangle(SkinManager.ColorScheme.PrimaryBrush, actionBarBounds);
 
             //Draw border
             using (var borderPen = new Pen(SkinManager.GetDividersColor(), 1)) {
@@ -396,7 +396,7 @@ namespace MaterialSkin.Controls {
             if (buttonState == ButtonState.XDown && ControlBox)
                 g.FillRectangle(downBrush, xButtonBounds);
 
-            using (var formButtonsPen = new Pen(SkinManager.ACTION_BAR_TEXT_SECONDARY, 2)) {
+            /*using (var formButtonsPen = new Pen(SkinManager.ACTION_BAR_TEXT_SECONDARY, 2)) {
                 // Minimize button.
                 if (showMin) {
                     int x = showMax ? minButtonBounds.X : maxButtonBounds.X;
@@ -446,6 +446,7 @@ namespace MaterialSkin.Controls {
 
             //Form title
             g.DrawString(Text, SkinManager.ROBOTO_MEDIUM_12, SkinManager.ColorScheme.TextBrush, new Rectangle(SkinManager.FORM_PADDING, STATUS_BAR_HEIGHT, Width, ACTION_BAR_HEIGHT), new StringFormat { LineAlignment = StringAlignment.Center });
+            /**/
         }
 
         public bool showIcon = true;

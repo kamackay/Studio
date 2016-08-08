@@ -34,7 +34,6 @@ namespace Electrum {
             base.Dispose(disposing);
         }
 
-        const int t = 100;
         const string defaultText = "Welcome to Electrum Studios";
 
         /// <summary>
@@ -49,31 +48,20 @@ namespace Electrum {
             optionsBar = new OptionsBar();
             list = new FlowLayoutPanel();
             loadingImage = new PictureBox();
-            pathBar = new TextBox();
-
-            pathBar.Font = new Font(Font.FontFamily, 20f);
-            pathBar.Text = "Something";
-            pathBar.Padding = new Padding(5);
-            pathBar.BackColor = Color.FromArgb(0x25, 0x24, 0x23);
-            pathBar.ForeColor = Color.Yellow;
-            pathBar.AutoSize = false;
-            pathBar.Visible = false;
-            pathBar.Size = new Size(Width, pathBar.Font.Height);
-            pathBar.Location = new Point(0, 100);
-            add(pathBar);
+           
 
             loadingImage.Image = Properties.Resources.material_loading;
             loadingImage.BackgroundImageLayout = ImageLayout.Zoom;
             loadingImage.BackColor = Color.Transparent;
             loadingImage.Size = new Size(50, 40);
-            loadingImage.Location = new Point(60, 120 + pathBar.Height);
+            loadingImage.Location = new Point(60, 40);
             loadingImage.SizeMode = PictureBoxSizeMode.Zoom;
             loadingImage.Visible = false;
             add(loadingImage);
 
             backButton = new BackButton();
             backButton.Size = new Size(50, 50);
-            backButton.Location = new Point(0, 110 + pathBar.Height);
+            backButton.Location = new Point(0,30);
             backButton.Visible = false;
             backButton.MouseClick += delegate (object o, MouseEventArgs args) {
                 if (args.Button == MouseButtons.Left) {
@@ -91,7 +79,8 @@ namespace Electrum {
                 new OptionsBar.Option {holdRight = true, title = "Right 2",
                     onClick = () => { } }/**/
             });
-            optionsBar.setBackgroundColor(Color.FromArgb(0x50, 0x50, 0x50));
+            optionsBar.setBackgroundColor(Color.FromArgb(0xFF, 0xEE, 0x58));
+            optionsBar.setFontColor(Color.Black);
             add(optionsBar);
 
             list.Dock = DockStyle.Bottom;
@@ -109,7 +98,6 @@ namespace Electrum {
                 optionsBar.runResize();
                 list.Height = Height - backButton.Bottom;
                 setButtonsWidth();
-                pathBar.Width = Width;
             };
 
             add(list);
@@ -118,7 +106,7 @@ namespace Electrum {
                 loadingImage.SendToBack();
                 optionsBar.Height = 30;
                 optionsBar.Width = Width;
-                optionsBar.Top = 70;
+                optionsBar.Top = 0;
             };
 
             MouseClick += delegate (object o, MouseEventArgs args) {
@@ -139,7 +127,6 @@ namespace Electrum {
         private int mostRecent = -1;
         private PictureBox loadingImage;
         private OptionsBar optionsBar;
-        private TextBox pathBar;
         private BackButton backButton;
         private FlowLayoutPanel list;
 
@@ -152,7 +139,6 @@ namespace Electrum {
             loading = true;
             this.runOnUiThread(() => {
                 Text = path.FullName;
-                pathBar.Text = Text;
                 if (!backButton.Visible) backButton.Visible = true;
                 loadingImage.Visible = true;
                 setAnimations(false);
